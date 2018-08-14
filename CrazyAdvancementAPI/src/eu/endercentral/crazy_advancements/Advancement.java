@@ -518,6 +518,14 @@ public class Advancement {
 		if(this.progress.containsKey(uuid.toString())) this.progress.remove(uuid.toString());
 	}
 	
+	public boolean isDone(Player player) {
+		return getProgress(player).isDone();
+	}
+	
+	public boolean isDone(UUID uuid) {
+		return getProgress(uuid).isDone();
+	}
+	
 	/**
 	 * 
 	 * @param player Player to check
