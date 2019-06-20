@@ -1,6 +1,6 @@
 package eu.endercentral.crazy_advancements;
 
-import net.minecraft.server.v1_13_R1.MinecraftKey;
+import net.minecraft.server.v1_14_R1.MinecraftKey;
 
 public class NameKey {
 	

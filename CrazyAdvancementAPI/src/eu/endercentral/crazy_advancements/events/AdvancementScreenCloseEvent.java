@@ -21,6 +21,7 @@ public class AdvancementScreenCloseEvent extends Event {
 	private final Player player;
 	
 	public AdvancementScreenCloseEvent(Player player) {
+		super(true);
 		this.player = player;
 	}
 	
