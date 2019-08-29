@@ -39,7 +39,7 @@ public class NameKey {
 	 * @param from
 	 */
 	public NameKey(MinecraftKey from) {
-		this.namespace = from.b().toLowerCase();
+		this.namespace = from.getNamespace().toLowerCase();
 		this.key = from.getKey().toLowerCase();
 	}
 	
