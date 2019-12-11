@@ -1,6 +1,6 @@
 package eu.endercentral.crazy_advancements;
 
-import net.minecraft.server.v1_14_R1.MinecraftKey;
+import net.minecraft.server.v1_15_R1.MinecraftKey;
 
 public class NameKey {
 	
@@ -21,7 +21,7 @@ public class NameKey {
 	
 	/**
 	 * 
-	 * @param key The key inside the default namespace "minecraft"
+	 * @param key The key inside the default namespace "minecraft" or a NameSpacedKey seperated by :
 	 */
 	public NameKey(String key) {
 		String[] split = key.split(":");
