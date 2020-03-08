@@ -1,0 +1,16 @@
+main: eu.endercentral.crazy_advancements.CrazyAdvancements
+name: CrazyAdvancementsAPI
+version: ${project.version}
+api-version: 1.13
+load: STARTUP
+author: ZockerAxel
+commands:
+  cagrant:
+    usage: /cagrant <Player> <Manager>|file <Advancement> [Criteria...]
+    description: Grants <Advancement>-[Criteria...] to <Player> in <Manager>
+  carevoke:
+    usage: /carevoke <Player> <Manager Name>|file <Advancement> [Criteria...]
+    description: Revokes <Advancement>-[Criteria...] from <Player> in <Manager>
+  showtoast:
+    usage: /showtoast <Player> <Icon> <Message>
+    description: Displays a Toast Advancement Message
