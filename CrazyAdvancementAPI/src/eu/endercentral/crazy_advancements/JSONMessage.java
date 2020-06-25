@@ -1,7 +1,7 @@
 package eu.endercentral.crazy_advancements;
 
-import net.minecraft.server.v1_15_R1.IChatBaseComponent;
-import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent;
+import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
 
 public class JSONMessage {
 	

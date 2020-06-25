@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.server.v1_15_R1.AdvancementFrameType;
+import net.minecraft.server.v1_16_R1.AdvancementFrameType;
 
 public class AdvancementDisplay {
 	
