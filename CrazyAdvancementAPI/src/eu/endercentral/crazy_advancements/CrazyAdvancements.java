@@ -15,8 +15,8 @@ import org.bukkit.Warning;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_16_R1.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R2.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,8 +29,8 @@ import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import net.minecraft.server.v1_16_R1.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R1.PacketPlayOutSelectAdvancementTab;
+import net.minecraft.server.v1_16_R2.PacketPlayOutAdvancements;
+import net.minecraft.server.v1_16_R2.PacketPlayOutSelectAdvancementTab;
 
 public class CrazyAdvancements extends JavaPlugin implements Listener {
 	

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="C:\Coding\Plugins\spigot.jar" destdir="C:\Coding\javadoc\CrazyAdvancementsAPI" doctitle="Documentation for CrazyAdvancementsAPI v1.10" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="eu.endercentral.crazy_advancements.events,eu.endercentral.crazy_advancements.manager" source="1.8" sourcefiles="src/eu/endercentral/crazy_advancements/CrazyAdvancements.java,src/eu/endercentral/crazy_advancements/NameKey.java,src/eu/endercentral/crazy_advancements/AdvancementDisplay.java,src/eu/endercentral/crazy_advancements/AdvancementVisibility.java,src/eu/endercentral/crazy_advancements/JSONMessage.java,src/eu/endercentral/crazy_advancements/CrazyMaterialAPI.java,src/eu/endercentral/crazy_advancements/Advancement.java" sourcepath="src" splitindex="true" use="true" version="true">
+            <link href="http://download.java.net/java/jdk9/docs/api/"/>
+        </javadoc>
+    </target>
+</project>
