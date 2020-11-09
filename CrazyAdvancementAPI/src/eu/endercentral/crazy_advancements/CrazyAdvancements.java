@@ -9,14 +9,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Warning;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_16_R2.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,10 +31,10 @@ import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import net.minecraft.server.v1_16_R2.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R2.PacketPlayOutSelectAdvancementTab;
+import net.minecraft.server.v1_16_R3.PacketPlayOutAdvancements;
+import net.minecraft.server.v1_16_R3.PacketPlayOutSelectAdvancementTab;
 
-public class CrazyAdvancements extends JavaPlugin implements Listener {
+public final class CrazyAdvancements extends JavaPlugin implements Listener {
 	
 	public static UUID CHAT_MESSAGE_UUID = new UUID(0, 0);
 	
@@ -58,7 +60,7 @@ public class CrazyAdvancements extends JavaPlugin implements Listener {
 	@Override
 	public void onLoad() {
 		instance = this;
-		fileAdvancementManager = AdvancementManager.getNewAdvancementManager();
+		fileAdvancementManager = new AdvancementManager();
 	}
 	
 	@Override
@@ -134,7 +136,9 @@ public class CrazyAdvancements extends JavaPlugin implements Listener {
 	 * 
 	 * @param players All players that should be in the new manager from the start, can be changed at any time
 	 * @return the generated advancement manager
+	 * @deprecated Use the AdvancementManager constructor instead of this method
 	 */
+	@Deprecated(since = "1.13.10")
 	public static AdvancementManager getNewAdvancementManager(Player... players) {
 		return AdvancementManager.getNewAdvancementManager(players);
 	}
@@ -162,9 +166,9 @@ public class CrazyAdvancements extends JavaPlugin implements Listener {
 	 * Sets the active tab
 	 * 
 	 * @param player The player whose Tab should be changed
-	 * @param rootAdvancementThe name of the tab to change to
+	 * @param rootAdvancement The name of the tab to change to
 	 */
-	public static void setActiveTab(Player player, NameKey rootAdvancement) {
+	public static void setActiveTab(Player player, @Nullable NameKey rootAdvancement) {
 		setActiveTab(player, rootAdvancement, true);
 	}
 	

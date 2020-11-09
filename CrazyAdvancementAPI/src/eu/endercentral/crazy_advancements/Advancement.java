@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Warning;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import com.google.gson.Gson;
@@ -25,20 +25,20 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
-import net.minecraft.server.v1_16_R2.AdvancementProgress;
-import net.minecraft.server.v1_16_R2.AdvancementRewards;
-import net.minecraft.server.v1_16_R2.ChatMessageType;
-import net.minecraft.server.v1_16_R2.ChatModifier;
-import net.minecraft.server.v1_16_R2.Criterion;
-import net.minecraft.server.v1_16_R2.CriterionInstance;
-import net.minecraft.server.v1_16_R2.EnumChatFormat;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R2.ItemStack;
-import net.minecraft.server.v1_16_R2.LootSerializationContext;
-import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R2.PacketPlayOutChat;
+import net.minecraft.server.v1_16_R3.AdvancementProgress;
+import net.minecraft.server.v1_16_R3.AdvancementRewards;
+import net.minecraft.server.v1_16_R3.ChatMessageType;
+import net.minecraft.server.v1_16_R3.ChatModifier;
+import net.minecraft.server.v1_16_R3.Criterion;
+import net.minecraft.server.v1_16_R3.CriterionInstance;
+import net.minecraft.server.v1_16_R3.EnumChatFormat;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R3.ItemStack;
+import net.minecraft.server.v1_16_R3.LootSerializationContext;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
+import net.minecraft.server.v1_16_R3.PacketPlayOutAdvancements;
+import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
 
 public class Advancement {
 	
@@ -298,8 +298,8 @@ public class Advancement {
 		
 		advRequirements = Arrays.stream(fixedRequirements.toArray()).toArray(String[][]::new);
 		
-		net.minecraft.server.v1_16_R2.AdvancementDisplay saveDisplay = new net.minecraft.server.v1_16_R2.AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), true, display.isAnnouncedToChat(), true);
-		net.minecraft.server.v1_16_R2.Advancement saveAdv = new net.minecraft.server.v1_16_R2.Advancement(notName, getParent() == null ? null : getParent().getSavedAdvancement(), saveDisplay, advRewards, advCriteria, advRequirements);
+		net.minecraft.server.v1_16_R3.AdvancementDisplay saveDisplay = new net.minecraft.server.v1_16_R3.AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), true, display.isAnnouncedToChat(), true);
+		net.minecraft.server.v1_16_R3.Advancement saveAdv = new net.minecraft.server.v1_16_R3.Advancement(notName, getParent() == null ? null : getParent().getSavedAdvancement(), saveDisplay, advRewards, advCriteria, advRequirements);
 		
 		
 		HashMap<MinecraftKey, AdvancementProgress> prg = new HashMap<>();
@@ -448,7 +448,7 @@ public class Advancement {
 	private Set<String> savedCriterionNames = null;
 	@SerializedName("criteriaRequirements")
 	private String[][] savedCriteriaRequirements = null;
-	private transient net.minecraft.server.v1_16_R2.Advancement savedAdvancement = null;
+	private transient net.minecraft.server.v1_16_R3.Advancement savedAdvancement = null;
 	
 	private transient HashMap<String, Boolean> savedHiddenStatus;
 	
@@ -486,11 +486,11 @@ public class Advancement {
 	}
 	
 	@Warning(reason = "Unsafe")
-	public void saveAdvancement(net.minecraft.server.v1_16_R2.Advancement save) {
+	public void saveAdvancement(net.minecraft.server.v1_16_R3.Advancement save) {
 		savedAdvancement = save;
 	}
 	
-	public net.minecraft.server.v1_16_R2.Advancement getSavedAdvancement() {
+	public net.minecraft.server.v1_16_R3.Advancement getSavedAdvancement() {
 		return savedAdvancement;
 	}
 	
