@@ -27,9 +27,9 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-        
+    
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file **/pom.xml
     - name: Release ZIP
       run: |
         mkdir -p temp/;
