@@ -33,5 +33,5 @@ jobs:
     - name: Release ZIP
       run: |
         mkdir -p temp/;
-        cp -r * temp/ --exclude temp;
+        cp -r !(temp) temp;
     - uses: actions/upload-artifact@v2
