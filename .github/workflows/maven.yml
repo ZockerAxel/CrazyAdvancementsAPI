@@ -33,5 +33,5 @@ jobs:
     - name: Release ZIP
       run: |
         mkdir -p temp/;
-        cp -r !(temp) temp;
+        find . -type f -not -iname 'temp' -exec cp '{}' 'temp/' ';'
     - uses: actions/upload-artifact@v2
