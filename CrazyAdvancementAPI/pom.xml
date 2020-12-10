@@ -5,10 +5,7 @@
   <groupId>eu.endercentral.crazy_advancements</groupId>
   <artifactId>CrazyAdvancementsAPI</artifactId>
   <version>1.13.11</version>
-  <packaging>jar</packaging>
-
-  <name>CrazyAdvancementsAPI</name>
-  <url>https://crazyadvancements.endercentral.eu</url>
+  <packaging>pom</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,7 +21,7 @@
   </dependencies>
   
   <repositories>
-	 <repository>
+     <repository>
         <id>spigot-repo</id>
         <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
