@@ -33,5 +33,5 @@ jobs:
     - name: Release ZIP
       run: |
         mkdir -p temp/;
-        cp **/target/*.jar temp/;
+        cp * temp/;
     - uses: actions/upload-artifact@v2
