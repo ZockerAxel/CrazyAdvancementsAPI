@@ -35,3 +35,6 @@ jobs:
         mkdir -p temp/;
         find . -type f -not -iname 'temp' -exec cp '{}' 'temp/' ';'
     - uses: actions/upload-artifact@v2
+      with:
+        name: repository
+        path: temp/
