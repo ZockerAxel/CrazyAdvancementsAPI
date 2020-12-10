@@ -28,9 +28,17 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Publish package
-      uses: actions/publish@v1
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        gpg_private_key: ${{ secrets.gpg_private_key }}
-        gpg_passphrase: ${{ secrets.gpg_passphrase }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+       tag_name: ${{ github.ref }}
+       release_name: Release ${{ github.ref }}
+       body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+       draft: false
+       prerelease: false
