@@ -5,7 +5,7 @@
     <groupId>eu.endercentral.crazy_advancements</groupId>
     <artifactId>CrazyAdvancementsAPI</artifactId>
     <version>1.13.11</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
