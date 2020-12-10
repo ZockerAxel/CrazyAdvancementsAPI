@@ -34,7 +34,7 @@ jobs:
       run: |
         mkdir -p temp/;
         ls -al;
-        cp **/target/*.jar temp/
+        find . -type f -iname 'target/*.jar' -exec cp -r '{}' '/temp{}' ';'
     - uses: actions/upload-artifact@v2
       with:
         name: repository
