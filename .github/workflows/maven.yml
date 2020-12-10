@@ -29,6 +29,8 @@ jobs:
       with:
         java-version: 11
     - name: Publish package
-      run: mvn -B deploy
-      env:
+      uses: MrFireDevil/action-maven-publish@v1
+      with:
+        gpg_private_key: ${{ secrets.gpg_private_key }}
+        gpg_passphrase: ${{ secrets.gpg_passphrase }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
