@@ -569,8 +569,7 @@ public final class AdvancementManager {
 					
 					advPrg.a(advancement.getSavedCriteria(), advancement.getSavedCriteriaRequirements());
 					
-					Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
-					HashSet<String> awarded = awardedCriteria.get(player.getUniqueId().toString());
+					HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 					
 					for(String criterion : advancement.getSavedCriteria().keySet()) {
 						if(awarded.contains(criterion)) {
@@ -1001,7 +1000,7 @@ public final class AdvancementManager {
 		checkAwarded(player, advancement);
 		Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 		
-		HashSet<String> awarded = awardedCriteria.get(player.getUniqueId().toString());
+		HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 		for(String criterion : advancement.getSavedCriteria().keySet()) {
 			awarded.add(criterion);
 		}
@@ -1039,7 +1038,7 @@ public final class AdvancementManager {
 			
 			Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 			
-			HashSet<String> awarded = awardedCriteria.get(uuid.toString());
+			HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
 			for(String criterion : advancement.getSavedCriteria().keySet()) {
 				awarded.add(criterion);
 			}
@@ -1100,7 +1099,7 @@ public final class AdvancementManager {
 		
 		Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 		
-		HashSet<String> awarded = awardedCriteria.get(player.getUniqueId().toString());
+		HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 		for(String criterion : criteria) {
 			awarded.add(criterion);
 		}
@@ -1129,7 +1128,7 @@ public final class AdvancementManager {
 			
 			Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 			
-			HashSet<String> awarded = awardedCriteria.get(uuid.toString());
+			HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
 			for(String criterion : criteria) {
 				awarded.add(criterion);
 			}
@@ -1158,7 +1157,7 @@ public final class AdvancementManager {
 			Bukkit.getPluginManager().callEvent(event);
 		}
 		
-		HashSet<String> awarded = awardedCriteria.get(player.getUniqueId().toString());
+		HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 		for(String criterion : criteria) {
 			if(awarded.contains(criterion)) awarded.remove(criterion);
 		}
@@ -1192,7 +1191,7 @@ public final class AdvancementManager {
 				Bukkit.getPluginManager().callEvent(event);
 			}
 			
-			HashSet<String> awarded = awardedCriteria.get(uuid.toString());
+			HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
 			for(String criterion : criteria) {
 				if(awarded.contains(criterion)) awarded.remove(criterion);
 			}
@@ -1217,7 +1216,7 @@ public final class AdvancementManager {
 		checkAwarded(player, advancement);
 		Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 		
-		HashSet<String> awarded = awardedCriteria.get(player.getUniqueId().toString());
+		HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 		
 		CriteriaProgressChangeEvent event = new CriteriaProgressChangeEvent(this, advancement, player, awarded.size(), progress);
 		Bukkit.getPluginManager().callEvent(event);
@@ -1270,7 +1269,7 @@ public final class AdvancementManager {
 			checkAwarded(uuid, advancement);
 			Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 			
-			HashSet<String> awarded = awardedCriteria.get(uuid.toString());
+			HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
 			
 			OfflineCriteriaProgressChangeEvent event = new OfflineCriteriaProgressChangeEvent(this, advancement, uuid, awarded.size(), progress);
 			Bukkit.getPluginManager().callEvent(event);
@@ -1313,9 +1312,7 @@ public final class AdvancementManager {
 	 */
 	public int getCriteriaProgress(Player player, Advancement advancement) {
 		checkAwarded(player, advancement);
-		Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
-		
-		return awardedCriteria.get(player.getUniqueId().toString()).size();
+		return advancement.getAwardedCriteria(player.getUniqueId()).size();
 	}
 	
 	/**
@@ -1326,10 +1323,7 @@ public final class AdvancementManager {
 	 */
 	public int getCriteriaProgress(UUID uuid, Advancement advancement) {
 		checkAwarded(uuid, advancement);
-		
-		Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
-		
-		return awardedCriteria.get(uuid.toString()).size();
+		return advancement.getAwardedCriteria(uuid).size();
 	}
 	
 	private String getSavePath(Player player, String namespace) {
