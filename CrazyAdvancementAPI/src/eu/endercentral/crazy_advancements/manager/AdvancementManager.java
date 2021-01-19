@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -29,8 +28,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.Advancement;
+import eu.endercentral.crazy_advancements.AdvancementVisibility;
 import eu.endercentral.crazy_advancements.CrazyAdvancements;
 import eu.endercentral.crazy_advancements.NameKey;
+import eu.endercentral.crazy_advancements.SaveMethod;
 import eu.endercentral.crazy_advancements.events.AdvancementGrantEvent;
 import eu.endercentral.crazy_advancements.events.AdvancementRevokeEvent;
 import eu.endercentral.crazy_advancements.events.CriteriaGrantEvent;
@@ -59,6 +60,9 @@ public final class AdvancementManager {
 	private static HashMap<String, AdvancementManager> accessible = new HashMap<>();
 	
 	private boolean hiddenBoolean = false;
+	private String criterionPrefix = "criterion.";
+	private String criterionNamespace = "minecraft";
+	private String criterionKey = "impossible";
 	
 	private static HashMap<NameKey, Float> smallestY = new HashMap<>();
 	private static HashMap<NameKey, Float> smallestX = new HashMap<>();
@@ -84,6 +88,78 @@ public final class AdvancementManager {
 	
 	private static float getSmallestX(NameKey key) {
 		return smallestX.containsKey(key) ? smallestX.get(key) : 0;
+	}
+	
+	/**
+	 * Sets the boolean that is passed via the advancement packet when an advancement is hidden<br>Default: false<br>When set to true, hidden advancements that have not been granted yet, will have a line drawn to them even though they aren't displayed yet, when they should be visible (according to their {@link AdvancementVisibility})<br>Can be used to create an empty advancement tab where there are no advancements visible and no lines visible, when the tab only has a hidden advancement as a root
+	 * 
+	 * @param hiddenBoolean The new hiddenBoolean
+	 */
+	public void setHiddenBoolean(boolean hiddenBoolean) {
+		this.hiddenBoolean = hiddenBoolean;
+	}
+	
+	/**
+	 * Gets the boolean that is passed via the advancement packet when an advancement is hidden<brDefault: false
+	 * 
+	 * @return
+	 */
+	public boolean getHiddenBoolean() {
+		return hiddenBoolean;
+	}
+	
+	/**
+	 * Set the prefix that is used for criteria<br>For legacy reasons, the default prefix is "criterion." as the advancement progress is stored by their criterion name, which consists of prefix + number<br>To reduce packet size and thus increase the max criteria number that can be used, the prefix can be set to an empty String<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+	 * 
+	 * @param criterionPrefix The new prefix that is used for criteria
+	 */
+	public void setCriterionPrefix(String criterionPrefix) {
+		this.criterionPrefix = criterionPrefix;
+	}
+	
+	/**
+	 * Get the prefix that is used for criteria
+	 * 
+	 * @return The prefix that is used for criteria
+	 */
+	public String getCriterionPrefix() {
+		return criterionPrefix;
+	}
+	
+	/**
+	 * Set the namespace that is used for the Namespaced Key for criteria<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+	 * 
+	 * @param criterionNamespace The new namespace that is used for the Namespaced Key for criteria
+	 */
+	public void setCriterionNamespace(String criterionNamespace) {
+		this.criterionNamespace = criterionNamespace;
+	}
+	
+	/**
+	 * Get the namespace that is used for the Namespaced Key for criteria
+	 * 
+	 * @return The namespace that is used for the Namespaced Key for criteria
+	 */
+	public String getCriterionNamespace() {
+		return criterionNamespace;
+	}
+	
+	/**
+	 * Sets the key that is used for the Namespaced Key for criteria<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+	 * 
+	 * @param criterionKey The new key that is used for the Namespaced Key for criteria
+	 */
+	public void setCriterionKey(String criterionKey) {
+		this.criterionKey = criterionKey;
+	}
+	
+	/**
+	 * Get the key that is used for the Namespaced Key for criteria
+	 * 
+	 * @return The key that is used for the Namespaced Key for criteria
+	 */
+	public String getCriterionKey() {
+		return criterionKey;
 	}
 	
 	private boolean announceAdvancementMessages = true;
@@ -185,7 +261,7 @@ public final class AdvancementManager {
 					
 					if(advancement.getSavedCriteria() == null) {
 						for(int i = 0; i < advancement.getCriteria(); i++) {
-							advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+							advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 								@Override
 								public JsonObject a(LootSerializationContext arg0) {
 									return null;
@@ -193,7 +269,7 @@ public final class AdvancementManager {
 								
 								@Override
 								public MinecraftKey a() {
-									return new MinecraftKey("minecraft", "impossible");
+									return new MinecraftKey(criterionNamespace, criterionKey);
 								}
 							}));
 						}
@@ -319,7 +395,7 @@ public final class AdvancementManager {
 			
 			if(advancement.getSavedCriteria() == null) {
 				for(int i = 0; i < advancement.getCriteria(); i++) {
-					advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+					advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 						@Override
 						public JsonObject a(LootSerializationContext arg0) {
 							return null;
@@ -327,7 +403,7 @@ public final class AdvancementManager {
 						
 						@Override
 						public MinecraftKey a() {
-							return new MinecraftKey("minecraft", "impossible");
+							return new MinecraftKey(criterionNamespace, criterionKey);
 						}
 					}));
 				}
@@ -528,7 +604,7 @@ public final class AdvancementManager {
 						
 						if(advancement.getSavedCriteria() == null) {
 							for(int i = 0; i < advancement.getCriteria(); i++) {
-								advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+								advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 									@Override
 									public JsonObject a(LootSerializationContext arg0) {
 										return null;
@@ -536,7 +612,7 @@ public final class AdvancementManager {
 									
 									@Override
 									public MinecraftKey a() {
-										return new MinecraftKey("minecraft", "impossible");
+										return new MinecraftKey(criterionNamespace, criterionKey);
 									}
 								}));
 							}
@@ -634,7 +710,7 @@ public final class AdvancementManager {
 					
 					if(advancement.getSavedCriteria() == null) {
 						for(int i = 0; i < advancement.getCriteria(); i++) {
-							advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+							advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 								@Override
 								public JsonObject a(LootSerializationContext arg0) {
 									return null;
@@ -642,7 +718,7 @@ public final class AdvancementManager {
 								
 								@Override
 								public MinecraftKey a() {
-									return new MinecraftKey("minecraft", "impossible");
+									return new MinecraftKey(criterionNamespace, criterionKey);
 								}
 							}));
 						}
@@ -832,7 +908,7 @@ public final class AdvancementManager {
 		
 		if(advancement.getSavedCriteria() == null) {
 			for(int i = 0; i < advancement.getCriteria(); i++) {
-				advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+				advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 					@Override
 					public JsonObject a(LootSerializationContext arg0) {
 						return null;
@@ -840,7 +916,7 @@ public final class AdvancementManager {
 					
 					@Override
 					public MinecraftKey a() {
-						return new MinecraftKey("minecraft", "impossible");
+						return new MinecraftKey(criterionNamespace, criterionKey);
 					}
 				}));
 			}
@@ -872,7 +948,7 @@ public final class AdvancementManager {
 		
 		if(advancement.getSavedCriteria() == null) {
 			for(int i = 0; i < advancement.getCriteria(); i++) {
-				advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
+				advCriteria.put(criterionPrefix + i, new Criterion(new CriterionInstance() {
 					@Override
 					public JsonObject a(LootSerializationContext arg0) {
 						return null;
@@ -880,7 +956,7 @@ public final class AdvancementManager {
 					
 					@Override
 					public MinecraftKey a() {
-						return new MinecraftKey("minecraft", "impossible");
+						return new MinecraftKey(criterionNamespace, criterionKey);
 					}
 				}));
 			}
@@ -907,8 +983,8 @@ public final class AdvancementManager {
 	}
 	
 	private boolean isOnline(UUID uuid) {
-		OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-		return player.isOnline();
+		Player player = Bukkit.getPlayer(uuid);
+		return player != null && player.isOnline();
 	}
 	
 	/**
@@ -1293,16 +1369,18 @@ public final class AdvancementManager {
 		
 		for(Advancement advancement : getAdvancements()) {
 			String nameKey = advancement.getName().toString();
+			SaveMethod saveMethod = advancement.getSaveMethod();
 			
-			List<String> progress = prg.containsKey(nameKey) ? prg.get(nameKey) : new ArrayList<>();
-			AdvancementProgress advPrg = advancement.getProgress(player);
-			for(String criterion : advancement.getSavedCriteria().keySet()) {
-				CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
-				if(critPrg != null && critPrg.a()) {
-					progress.add(criterion);
-				}
+			if(saveMethod == SaveMethod.NUMBER) {
+				int criteriaProgress = getCriteriaProgress(player, advancement);
+				ArrayList<String> progress = new ArrayList<>();
+				progress.add("NUM");//Indicator for Number Save Method
+				progress.add("" + criteriaProgress);
+				prg.put(nameKey, progress);
+			} else {
+				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(player.getUniqueId().toString()));
+				prg.put(nameKey, progress);
 			}
-			prg.put(nameKey, progress);
 		}
 		
 		check();
@@ -1325,16 +1403,18 @@ public final class AdvancementManager {
 			
 			if(namespace.equalsIgnoreCase(anotherNamespace)) {
 				String nameKey = advancement.getName().toString();
+				SaveMethod saveMethod = advancement.getSaveMethod();
 				
-				List<String> progress = prg.containsKey(nameKey) ? prg.get(nameKey) : new ArrayList<>();
-				AdvancementProgress advPrg = advancement.getProgress(player);
-				for(String criterion : advancement.getSavedCriteria().keySet()) {
-					CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
-					if(critPrg != null && critPrg.a()) {
-						progress.add(criterion);
-					}
+				if(saveMethod == SaveMethod.NUMBER) {
+					int criteriaProgress = getCriteriaProgress(player, advancement);
+					ArrayList<String> progress = new ArrayList<>();
+					progress.add("NUM");//Indicator for Number Save Method
+					progress.add("" + criteriaProgress);
+					prg.put(nameKey, progress);
+				} else {
+					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(player.getUniqueId().toString()));
+					prg.put(nameKey, progress);
 				}
-				prg.put(nameKey, progress);
 			}
 		}
 		
@@ -1389,9 +1469,31 @@ public final class AdvancementManager {
 					
 					if(prg.containsKey(nameKey)) {
 						List<String> loaded = prg.get(nameKey);
+						SaveMethod saveMethod = advancement.getSaveMethod();
 						
-						grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+						if(saveMethod == SaveMethod.NUMBER) {
+							if(loaded.size() == 2) {
+								if(loaded.get(0).equals("NUM")) {
+									try {
+										int progress = Integer.parseInt(loaded.get(1));
+										setCriteriaProgress(player, advancement, progress);
+									} catch (NumberFormatException e) {
+										//Use Default Load Method
+										saveMethod = SaveMethod.DEFAULT;
+									}
+								} else {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						}
 						
+						if(saveMethod == SaveMethod.DEFAULT) {
+							grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+						}
 					}
 				}
 			}
@@ -1423,9 +1525,31 @@ public final class AdvancementManager {
 					
 					if(prg.containsKey(nameKey)) {
 						List<String> loaded = prg.get(nameKey);
+						SaveMethod saveMethod = advancement.getSaveMethod();
 						
-						grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+						if(saveMethod == SaveMethod.NUMBER) {
+							if(loaded.size() == 2) {
+								if(loaded.get(0).equals("NUM")) {
+									try {
+										int progress = Integer.parseInt(loaded.get(1));
+										setCriteriaProgress(player, advancement, progress);
+									} catch (NumberFormatException e) {
+										//Use Default Load Method
+										saveMethod = SaveMethod.DEFAULT;
+									}
+								} else {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						}
 						
+						if(saveMethod == SaveMethod.DEFAULT) {
+							grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+						}
 					}
 				}
 			}
@@ -1452,9 +1576,31 @@ public final class AdvancementManager {
 			
 			if(prg.containsKey(nameKey)) {
 				List<String> loaded = prg.get(nameKey);
+				SaveMethod saveMethod = advancement.getSaveMethod();
 				
-				grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+				if(saveMethod == SaveMethod.NUMBER) {
+					if(loaded.size() == 2) {
+						if(loaded.get(0).equals("NUM")) {
+							try {
+								int progress = Integer.parseInt(loaded.get(1));
+								setCriteriaProgress(player, advancement, progress);
+							} catch (NumberFormatException e) {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					} else {
+						//Use Default Load Method
+						saveMethod = SaveMethod.DEFAULT;
+					}
+				}
 				
+				if(saveMethod == SaveMethod.DEFAULT) {
+					grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+				}
 			}
 		}
 	}
@@ -1475,9 +1621,31 @@ public final class AdvancementManager {
 			
 			if(prg.containsKey(nameKey)) {
 				List<String> loaded = prg.get(nameKey);
+				SaveMethod saveMethod = advancement.getSaveMethod();
 				
-				grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+				if(saveMethod == SaveMethod.NUMBER) {
+					if(loaded.size() == 2) {
+						if(loaded.get(0).equals("NUM")) {
+							try {
+								int progress = Integer.parseInt(loaded.get(1));
+								setCriteriaProgress(player, advancement, progress);
+							} catch (NumberFormatException e) {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					} else {
+						//Use Default Load Method
+						saveMethod = SaveMethod.DEFAULT;
+					}
+				}
 				
+				if(saveMethod == SaveMethod.DEFAULT) {
+					grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+				}
 			}
 		}
 	}
@@ -1500,9 +1668,31 @@ public final class AdvancementManager {
 				
 				if(prg.containsKey(nameKey)) {
 					List<String> loaded = prg.get(nameKey);
+					SaveMethod saveMethod = advancement.getSaveMethod();
 					
-					grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+					if(saveMethod == SaveMethod.NUMBER) {
+						if(loaded.size() == 2) {
+							if(loaded.get(0).equals("NUM")) {
+								try {
+									int progress = Integer.parseInt(loaded.get(1));
+									setCriteriaProgress(player, advancement, progress);
+								} catch (NumberFormatException e) {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					}
 					
+					if(saveMethod == SaveMethod.DEFAULT) {
+						grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+					}
 				}
 			}
 		}
@@ -1538,224 +1728,109 @@ public final class AdvancementManager {
 	
 	//Offline Save/Load
 	
-		/**
-		 * 
-		 * @param uuid Player UUID to check
-		 * @return A JSON String representation of the progress for a player
-		 */
-		public String getProgressJSON(UUID uuid) {
-			HashMap<String, List<String>> prg = new HashMap<>();
+	/**
+	 * 
+	 * @param uuid Player UUID to check
+	 * @return A JSON String representation of the progress for a player
+	 */
+	public String getProgressJSON(UUID uuid) {
+		HashMap<String, List<String>> prg = new HashMap<>();
+		
+		for(Advancement advancement : getAdvancements()) {
+			String nameKey = advancement.getName().toString();
+			SaveMethod saveMethod = advancement.getSaveMethod();
 			
-			for(Advancement advancement : getAdvancements()) {
-				String nameKey = advancement.getName().toString();
-				
-				List<String> progress = prg.containsKey(nameKey) ? prg.get(nameKey) : new ArrayList<>();
-				AdvancementProgress advPrg = advancement.getProgress(uuid);
-				for(String criterion : advancement.getSavedCriteria().keySet()) {
-					CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
-					if(critPrg != null && critPrg.a()) {
-						progress.add(criterion);
-					}
-				}
+			if(saveMethod == SaveMethod.NUMBER) {
+				int criteriaProgress = getCriteriaProgress(uuid, advancement);
+				ArrayList<String> progress = new ArrayList<>();
+				progress.add("NUM");//Indicator for Number Save Method
+				progress.add("" + criteriaProgress);
+				prg.put(nameKey, progress);
+			} else {
+				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(uuid.toString()));
 				prg.put(nameKey, progress);
 			}
-			
-			check();
-			String json = gson.toJson(prg);
-			
-			return json;
 		}
 		
-		/**
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param namespace Namespace to check
-		 * @return A JSON String representation of the progress for a player in a specified namespace
-		 */
-		public String getProgressJSON(UUID uuid, String namespace) {
-			HashMap<String, List<String>> prg = new HashMap<>();
+		check();
+		String json = gson.toJson(prg);
+		
+		return json;
+	}
+	
+	/**
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param namespace Namespace to check
+	 * @return A JSON String representation of the progress for a player in a specified namespace
+	 */
+	public String getProgressJSON(UUID uuid, String namespace) {
+		HashMap<String, List<String>> prg = new HashMap<>();
+		
+		for(Advancement advancement : getAdvancements()) {
+			String anotherNamespace = advancement.getName().getNamespace();
 			
-			for(Advancement advancement : getAdvancements()) {
-				String anotherNamespace = advancement.getName().getNamespace();
+			if(namespace.equalsIgnoreCase(anotherNamespace)) {
+				String nameKey = advancement.getName().toString();
+				SaveMethod saveMethod = advancement.getSaveMethod();
 				
-				if(namespace.equalsIgnoreCase(anotherNamespace)) {
-					String nameKey = advancement.getName().toString();
-					
-					List<String> progress = prg.containsKey(nameKey) ? prg.get(nameKey) : new ArrayList<>();
-					AdvancementProgress advPrg = advancement.getProgress(uuid);
-					for(String criterion : advancement.getSavedCriteria().keySet()) {
-						CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
-						if(critPrg != null && critPrg.a()) {
-							progress.add(criterion);
-						}
-					}
+				if(saveMethod == SaveMethod.NUMBER) {
+					int criteriaProgress = getCriteriaProgress(uuid, advancement);
+					ArrayList<String> progress = new ArrayList<>();
+					progress.add("NUM");//Indicator for Number Save Method
+					progress.add("" + criteriaProgress);
+					prg.put(nameKey, progress);
+				} else {
+					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(uuid.toString()));
 					prg.put(nameKey, progress);
 				}
 			}
-			
-			check();
-			String json = gson.toJson(prg);
-			
-			return json;
 		}
 		
-		/**
-		 * Saves the progress
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param namespace Namespace to check
-		 */
-		public void saveProgress(UUID uuid, String namespace) {
-			File saveFile = getSaveFile(uuid, namespace);
-			
-			String json = getProgressJSON(uuid, namespace);
-			
-			try {
-				if(!saveFile.exists()) {
-					saveFile.createNewFile();
-				}
-				FileWriter w = new FileWriter(saveFile);
-				w.write(json);
-				w.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+		check();
+		String json = gson.toJson(prg);
+		
+		return json;
+	}
+	
+	/**
+	 * Saves the progress
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param namespace Namespace to check
+	 */
+	public void saveProgress(UUID uuid, String namespace) {
+		File saveFile = getSaveFile(uuid, namespace);
+		
+		String json = getProgressJSON(uuid, namespace);
+		
+		try {
+			if(!saveFile.exists()) {
+				saveFile.createNewFile();
 			}
+			FileWriter w = new FileWriter(saveFile);
+			w.write(json);
+			w.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+	
+	//Load Progress
+	
+	/**
+	 * Loads the progress<br>
+	 * <b>Recommended to only load progress for online players!</b>
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param namespace Namespace to check
+	 */
+	@Deprecated
+	public void loadProgress(UUID uuid, String namespace) {
+		File saveFile = getSaveFile(uuid, namespace);
 		
-		//Load Progress
-		
-		/**
-		 * Loads the progress<br>
-		 * <b>Recommended to only load progress for online players!</b>
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param namespace Namespace to check
-		 */
-		@Deprecated
-		public void loadProgress(UUID uuid, String namespace) {
-			File saveFile = getSaveFile(uuid, namespace);
-			
-			if(saveFile.exists() && saveFile.isFile()) {
-				HashMap<String, List<String>> prg = getProgress(uuid, namespace);
-				
-				for(Advancement advancement : advancements) {
-					if(advancement.getName().getNamespace().equalsIgnoreCase(namespace)) {
-						checkAwarded(uuid, advancement);
-						
-						String nameKey = advancement.getName().toString();
-						
-						if(prg.containsKey(nameKey)) {
-							List<String> loaded = prg.get(nameKey);
-							
-							grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
-							
-						}
-					}
-				}
-			}
-		}
-		
-		/**
-		 * Loads the progress<br>
-		 * <b>Recommended to only load progress for online players!</b>
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param advancementsLoaded Array of advancements to check, all advancements which arent in the same namespace as the first one will be ignored
-		 */
-		@Deprecated
-		public void loadProgress(UUID uuid, Advancement... advancementsLoaded) {
-			if(advancementsLoaded.length == 0) return;
-			List<Advancement> advancements = Arrays.asList(advancementsLoaded);
-			
-			String namespace = advancements.get(0).getName().getNamespace();
-			
-			File saveFile = getSaveFile(uuid, namespace);
-			
-			if(saveFile.exists() && saveFile.isFile()) {
-				HashMap<String, List<String>> prg = getProgress(uuid, namespace);
-				
-				for(Advancement advancement : advancements) {
-					if(advancement.getName().getNamespace().equalsIgnoreCase(namespace)) {
-						checkAwarded(uuid, advancement);
-						
-						String nameKey = advancement.getName().toString();
-						
-						if(prg.containsKey(nameKey)) {
-							List<String> loaded = prg.get(nameKey);
-							
-							grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
-							
-						}
-					}
-				}
-			}
-		}
-		
-		/**
-		 * Loads the progress with a custom JSON String<br>
-		 * <b>Recommended to only load progress for online players!</b>
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param json JSON String to load from
-		 * @param advancementsLoaded Array of advancements to check
-		 */
-		@Deprecated
-		public void loadCustomProgress(UUID uuid, String json, Advancement... advancementsLoaded) {
-			if(advancementsLoaded.length == 0) return;
-			List<Advancement> advancements = Arrays.asList(advancementsLoaded);
-					
-			HashMap<String, List<String>> prg = getCustomProgress(json);
-			
-			for(Advancement advancement : advancements) {
-				checkAwarded(uuid, advancement);
-				
-				String nameKey = advancement.getName().toString();
-				
-				if(prg.containsKey(nameKey)) {
-					List<String> loaded = prg.get(nameKey);
-					
-					grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
-					
-				}
-			}
-		}
-		
-		/**
-		 * Loads the progress with a custom JSON String<br>
-		 * <b>Recommended to only load progress for online players!</b>
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param json JSON String to load from
-		 */
-		@Deprecated
-		public void loadCustomProgress(UUID uuid, String json) {
-			HashMap<String, List<String>> prg = getCustomProgress(json);
-			
-			for(Advancement advancement : advancements) {
-				checkAwarded(uuid, advancement);
-				
-				String nameKey = advancement.getName().toString();
-				
-				if(prg.containsKey(nameKey)) {
-					List<String> loaded = prg.get(nameKey);
-					
-					grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
-					
-				}
-			}
-		}
-		
-		/**
-		 * Loads the progress with a custom JSON String<br>
-		 * <b>Recommended to only load progress for online players!</b>
-		 * 
-		 * @param uuid Player UUID to check
-		 * @param json JSON String to load from
-		 * @param namespace Namespace to check
-		 */
-		@Deprecated
-		public void loadCustomProgress(UUID uuid, String json, String namespace) {
-			HashMap<String, List<String>> prg = getCustomProgress(json);
+		if(saveFile.exists() && saveFile.isFile()) {
+			HashMap<String, List<String>> prg = getProgress(uuid, namespace);
 			
 			for(Advancement advancement : advancements) {
 				if(advancement.getName().getNamespace().equalsIgnoreCase(namespace)) {
@@ -1765,86 +1840,318 @@ public final class AdvancementManager {
 					
 					if(prg.containsKey(nameKey)) {
 						List<String> loaded = prg.get(nameKey);
+						SaveMethod saveMethod = advancement.getSaveMethod();
 						
-						grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+						if(saveMethod == SaveMethod.NUMBER) {
+							if(loaded.size() == 2) {
+								if(loaded.get(0).equals("NUM")) {
+									try {
+										int progress = Integer.parseInt(loaded.get(1));
+										setCriteriaProgress(uuid, advancement, progress);
+									} catch (NumberFormatException e) {
+										//Use Default Load Method
+										saveMethod = SaveMethod.DEFAULT;
+									}
+								} else {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						}
 						
+						if(saveMethod == SaveMethod.DEFAULT) {
+							grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Loads the progress<br>
+	 * <b>Recommended to only load progress for online players!</b>
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param advancementsLoaded Array of advancements to check, all advancements which arent in the same namespace as the first one will be ignored
+	 */
+	@Deprecated
+	public void loadProgress(UUID uuid, Advancement... advancementsLoaded) {
+		if(advancementsLoaded.length == 0) return;
+		List<Advancement> advancements = Arrays.asList(advancementsLoaded);
 		
-		//Unload Progress
+		String namespace = advancements.get(0).getName().getNamespace();
 		
-		/**
-		 * Unloads the progress for all advancements in the manager<br>
-		 * <b>Does not work for Online Players!</b>
-		 * 
-		 * @param uuid Affected Player UUID
-		 */
-		public void unloadProgress(UUID uuid) {
-			if(isOnline(uuid)) {
-				throw new UnloadProgressFailedException(uuid);
-			} else {
-				for(Advancement advancement : getAdvancements()) {
-					advancement.unsetProgress(uuid);
-				}
-			}
-		}
+		File saveFile = getSaveFile(uuid, namespace);
 		
-		/**
-		 * Unloads the progress for all advancements in the manager with a specified namespace<br>
-		 * <b>Does not work for Online Players!</b>
-		 * 
-		 * @param uuid Affected Player UUID
-		 * @param namespace Specific Namespace
-		 */
-		public void unloadProgress(UUID uuid, String namespace) {
-			if(isOnline(uuid)) {
-				throw new UnloadProgressFailedException(uuid);
-			} else {
-				for(Advancement advancement : getAdvancements(namespace)) {
-					advancement.unsetProgress(uuid);
-				}
-			}
-		}
-		
-		/**
-		 * Unloads the progress for the given advancements<br>
-		 * <b>Does not work for Online Players!</b>
-		 * 
-		 * @param uuid Affected Player UUID
-		 * @param advancements Specific Advancements
-		 */
-		public void unloadProgress(UUID uuid, Advancement... advancements) {
-			if(isOnline(uuid)) {
-				throw new UnloadProgressFailedException(uuid);
-			} else {
-				for(Advancement advancement : advancements) {
-					advancement.unsetProgress(uuid);
-				}
-			}
-		}
-		
-		private HashMap<String, List<String>> getProgress(UUID uuid, String namespace) {
-			File saveFile = getSaveFile(uuid, namespace);
+		if(saveFile.exists() && saveFile.isFile()) {
+			HashMap<String, List<String>> prg = getProgress(uuid, namespace);
 			
-			try {
-				FileReader os = new FileReader(saveFile);
-				
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(os);
-				os.close();
-				
-				check();
-				
-				HashMap<String, List<String>> progressList = gson.fromJson(element, progressListType);
-				
-				return progressList;
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return new HashMap<>();
+			for(Advancement advancement : advancements) {
+				if(advancement.getName().getNamespace().equalsIgnoreCase(namespace)) {
+					checkAwarded(uuid, advancement);
+					
+					String nameKey = advancement.getName().toString();
+					
+					if(prg.containsKey(nameKey)) {
+						List<String> loaded = prg.get(nameKey);
+						SaveMethod saveMethod = advancement.getSaveMethod();
+						
+						if(saveMethod == SaveMethod.NUMBER) {
+							if(loaded.size() == 2) {
+								if(loaded.get(0).equals("NUM")) {
+									try {
+										int progress = Integer.parseInt(loaded.get(1));
+										setCriteriaProgress(uuid, advancement, progress);
+									} catch (NumberFormatException e) {
+										//Use Default Load Method
+										saveMethod = SaveMethod.DEFAULT;
+									}
+								} else {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						}
+						
+						if(saveMethod == SaveMethod.DEFAULT) {
+							grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+						}
+					}
+				}
 			}
 		}
+	}
+	
+	/**
+	 * Loads the progress with a custom JSON String<br>
+	 * <b>Recommended to only load progress for online players!</b>
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param json JSON String to load from
+	 * @param advancementsLoaded Array of advancements to check
+	 */
+	@Deprecated
+	public void loadCustomProgress(UUID uuid, String json, Advancement... advancementsLoaded) {
+		if(advancementsLoaded.length == 0) return;
+		List<Advancement> advancements = Arrays.asList(advancementsLoaded);
+				
+		HashMap<String, List<String>> prg = getCustomProgress(json);
+		
+		for(Advancement advancement : advancements) {
+			checkAwarded(uuid, advancement);
+			
+			String nameKey = advancement.getName().toString();
+			
+			if(prg.containsKey(nameKey)) {
+				List<String> loaded = prg.get(nameKey);
+				SaveMethod saveMethod = advancement.getSaveMethod();
+				
+				if(saveMethod == SaveMethod.NUMBER) {
+					if(loaded.size() == 2) {
+						if(loaded.get(0).equals("NUM")) {
+							try {
+								int progress = Integer.parseInt(loaded.get(1));
+								setCriteriaProgress(uuid, advancement, progress);
+							} catch (NumberFormatException e) {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					} else {
+						//Use Default Load Method
+						saveMethod = SaveMethod.DEFAULT;
+					}
+				}
+				
+				if(saveMethod == SaveMethod.DEFAULT) {
+					grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Loads the progress with a custom JSON String<br>
+	 * <b>Recommended to only load progress for online players!</b>
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param json JSON String to load from
+	 */
+	@Deprecated
+	public void loadCustomProgress(UUID uuid, String json) {
+		HashMap<String, List<String>> prg = getCustomProgress(json);
+		
+		for(Advancement advancement : advancements) {
+			checkAwarded(uuid, advancement);
+			
+			String nameKey = advancement.getName().toString();
+			
+			if(prg.containsKey(nameKey)) {
+				List<String> loaded = prg.get(nameKey);
+				SaveMethod saveMethod = advancement.getSaveMethod();
+				
+				if(saveMethod == SaveMethod.NUMBER) {
+					if(loaded.size() == 2) {
+						if(loaded.get(0).equals("NUM")) {
+							try {
+								int progress = Integer.parseInt(loaded.get(1));
+								setCriteriaProgress(uuid, advancement, progress);
+							} catch (NumberFormatException e) {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					} else {
+						//Use Default Load Method
+						saveMethod = SaveMethod.DEFAULT;
+					}
+				}
+				
+				if(saveMethod == SaveMethod.DEFAULT) {
+					grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Loads the progress with a custom JSON String<br>
+	 * <b>Recommended to only load progress for online players!</b>
+	 * 
+	 * @param uuid Player UUID to check
+	 * @param json JSON String to load from
+	 * @param namespace Namespace to check
+	 */
+	@Deprecated
+	public void loadCustomProgress(UUID uuid, String json, String namespace) {
+		HashMap<String, List<String>> prg = getCustomProgress(json);
+		
+		for(Advancement advancement : advancements) {
+			if(advancement.getName().getNamespace().equalsIgnoreCase(namespace)) {
+				checkAwarded(uuid, advancement);
+				
+				String nameKey = advancement.getName().toString();
+				
+				if(prg.containsKey(nameKey)) {
+					List<String> loaded = prg.get(nameKey);
+					SaveMethod saveMethod = advancement.getSaveMethod();
+					
+					if(saveMethod == SaveMethod.NUMBER) {
+						if(loaded.size() == 2) {
+							if(loaded.get(0).equals("NUM")) {
+								try {
+									int progress = Integer.parseInt(loaded.get(1));
+									setCriteriaProgress(uuid, advancement, progress);
+								} catch (NumberFormatException e) {
+									//Use Default Load Method
+									saveMethod = SaveMethod.DEFAULT;
+								}
+							} else {
+								//Use Default Load Method
+								saveMethod = SaveMethod.DEFAULT;
+							}
+						} else {
+							//Use Default Load Method
+							saveMethod = SaveMethod.DEFAULT;
+						}
+					}
+					
+					if(saveMethod == SaveMethod.DEFAULT) {
+						grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+					}
+				}
+			}
+		}
+	}
+	
+	//Unload Progress
+	
+	/**
+	 * Unloads the progress for all advancements in the manager<br>
+	 * <b>Does not work for Online Players!</b>
+	 * 
+	 * @param uuid Affected Player UUID
+	 */
+	public void unloadProgress(UUID uuid) {
+		if(isOnline(uuid)) {
+			throw new UnloadProgressFailedException(uuid);
+		} else {
+			for(Advancement advancement : getAdvancements()) {
+				advancement.unsetProgress(uuid);
+				advancement.unsetAwardedCriteria(uuid);
+			}
+		}
+	}
+	
+	/**
+	 * Unloads the progress for all advancements in the manager with a specified namespace<br>
+	 * <b>Does not work for Online Players!</b>
+	 * 
+	 * @param uuid Affected Player UUID
+	 * @param namespace Specific Namespace
+	 */
+	public void unloadProgress(UUID uuid, String namespace) {
+		if(isOnline(uuid)) {
+			throw new UnloadProgressFailedException(uuid);
+		} else {
+			for(Advancement advancement : getAdvancements(namespace)) {
+				advancement.unsetProgress(uuid);
+				advancement.unsetAwardedCriteria(uuid);
+			}
+		}
+	}
+	
+	/**
+	 * Unloads the progress for the given advancements<br>
+	 * <b>Does not work for Online Players!</b>
+	 * 
+	 * @param uuid Affected Player UUID
+	 * @param advancements Specific Advancements
+	 */
+	public void unloadProgress(UUID uuid, Advancement... advancements) {
+		if(isOnline(uuid)) {
+			throw new UnloadProgressFailedException(uuid);
+		} else {
+			for(Advancement advancement : advancements) {
+				advancement.unsetProgress(uuid);
+				advancement.unsetAwardedCriteria(uuid);
+			}
+		}
+	}
+	
+	private HashMap<String, List<String>> getProgress(UUID uuid, String namespace) {
+		File saveFile = getSaveFile(uuid, namespace);
+		
+		try {
+			FileReader os = new FileReader(saveFile);
+			
+			JsonParser parser = new JsonParser();
+			JsonElement element = parser.parse(os);
+			os.close();
+			
+			check();
+			
+			HashMap<String, List<String>> progressList = gson.fromJson(element, progressListType);
+			
+			return progressList;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return new HashMap<>();
+		}
+	}
 	
 	
 	

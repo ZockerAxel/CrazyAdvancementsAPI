@@ -4,8 +4,8 @@ import net.minecraft.server.v1_16_R3.MinecraftKey;
 
 public class NameKey {
 	
-	private String namespace = "minecraft";
-	private String key = "???";
+	private final String namespace;
+	private final String key;
 	
 	private transient MinecraftKey mcKey;
 	
@@ -21,11 +21,12 @@ public class NameKey {
 	
 	/**
 	 * 
-	 * @param key The key inside the default namespace "minecraft" or a NameSpacedKey seperated by :
+	 * @param key The key inside the default namespace "minecraft" or a NameSpacedKey seperated by a colon
 	 */
 	public NameKey(String key) {
 		String[] split = key.split(":");
 		if(split.length < 2) {
+			this.namespace = "minecraft";
 			this.key = key.toLowerCase();
 		} else {
 			this.namespace = split[0].toLowerCase();

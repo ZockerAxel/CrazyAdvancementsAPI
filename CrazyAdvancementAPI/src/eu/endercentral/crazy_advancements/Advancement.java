@@ -49,6 +49,7 @@ public class Advancement {
 	private String nameKey;
 	
 	private AdvancementDisplay display;
+	private SaveMethod saveMethod = SaveMethod.DEFAULT;
 	
 	private transient Advancement parent;
 	@SerializedName("parent")
@@ -146,30 +147,9 @@ public class Advancement {
 	 */
 	public void setCriteria(int criteria) {
 		this.criteria = criteria;
-		Map<String, Criterion> advCriteria = new HashMap<>();
-		String[][] advRequirements = new String[][] {};
-		
-		for(int i = 0; i < getCriteria(); i++) {
-			advCriteria.put("criterion." + i, new Criterion(new CriterionInstance() {
-				@Override
-				public JsonObject a(LootSerializationContext arg0) {
-					return null;
-				}
-				
-				@Override
-				public MinecraftKey a() {
-					return new MinecraftKey("minecraft", "impossible");
-				}
-			}));
-		}
-		saveCriteria(advCriteria);
-		
-		ArrayList<String[]> fixedRequirements = new ArrayList<>();
-		for(String name : advCriteria.keySet()) {
-			fixedRequirements.add(new String[] {name});
-		}
-		advRequirements = Arrays.stream(fixedRequirements.toArray()).toArray(String[][]::new);
-		saveCriteriaRequirements(advRequirements);
+		savedCriteria = null;
+		savedCriterionNames = null;
+		savedCriteriaRequirements = null;
 	}
 	
 	/**
@@ -188,8 +168,31 @@ public class Advancement {
 		return name;
 	}
 	
+	/**
+	 * Get the Display
+	 * 
+	 * @return The display
+	 */
 	public AdvancementDisplay getDisplay() {
 		return display;
+	}
+	
+	/**
+	 * Set the Save/Load method<br>{@link SaveMethod.DEFAULT} - Criteria Values will be saved and loaded<br>{@link SaveMethod.NUMBER} - Criteria Number will be saved and loaded
+	 * 
+	 * @param saveMethod The Save/Load Method
+	 */
+	public void setSaveMethod(SaveMethod saveMethod) {
+		this.saveMethod = saveMethod;
+	}
+	
+	/**
+	 * Get the Save/Load Method that is currently in use
+	 * 
+	 * @return The Save/Load Method
+	 */
+	public SaveMethod getSaveMethod() {
+		return saveMethod;
 	}
 	
 	/**
@@ -505,6 +508,12 @@ public class Advancement {
 	@Warning(reason = "Unsafe")
 	public void setAwardedCriteria(Map<String, HashSet<String>> awardedCriteria) {
 		this.awardedCriteria = awardedCriteria;
+	}
+	
+	@Warning(reason = "Only use if you know what you are doing!")
+	public void unsetAwardedCriteria(UUID uuid) {
+		if(this.awardedCriteria == null) this.awardedCriteria = new HashMap<>();
+		if(this.awardedCriteria.containsKey(uuid.toString())) this.awardedCriteria.remove(uuid.toString());
 	}
 	
 	public AdvancementProgress getProgress(Player player) {
