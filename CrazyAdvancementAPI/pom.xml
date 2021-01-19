@@ -4,7 +4,7 @@
 
   <groupId>eu.endercentral.crazy_advancements</groupId>
   <artifactId>CrazyAdvancementsAPI</artifactId>
-  <version>1.14</version>
+  <version>1.14.1</version>
   <packaging>jar</packaging>
 
   <name>CrazyAdvancementsAPI</name>
