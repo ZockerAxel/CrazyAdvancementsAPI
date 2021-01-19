@@ -1378,7 +1378,7 @@ public final class AdvancementManager {
 				progress.add("" + criteriaProgress);
 				prg.put(nameKey, progress);
 			} else {
-				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(player.getUniqueId().toString()));
+				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria(player.getUniqueId()));
 				prg.put(nameKey, progress);
 			}
 		}
@@ -1412,7 +1412,7 @@ public final class AdvancementManager {
 					progress.add("" + criteriaProgress);
 					prg.put(nameKey, progress);
 				} else {
-					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(player.getUniqueId().toString()));
+					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria(player.getUniqueId()));
 					prg.put(nameKey, progress);
 				}
 			}
@@ -1747,7 +1747,7 @@ public final class AdvancementManager {
 				progress.add("" + criteriaProgress);
 				prg.put(nameKey, progress);
 			} else {
-				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(uuid.toString()));
+				ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria(uuid));
 				prg.put(nameKey, progress);
 			}
 		}
@@ -1781,7 +1781,7 @@ public final class AdvancementManager {
 					progress.add("" + criteriaProgress);
 					prg.put(nameKey, progress);
 				} else {
-					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria().get(uuid.toString()));
+					ArrayList<String> progress = new ArrayList<>(advancement.getAwardedCriteria(uuid));
 					prg.put(nameKey, progress);
 				}
 			}

@@ -500,6 +500,11 @@ public class Advancement {
 	
 	//Player Actions
 	
+	public HashSet<String> getAwardedCriteria(UUID uuid) {
+		if(!getAwardedCriteria().containsKey(uuid.toString())) getAwardedCriteria().put(uuid.toString(), new HashSet<>());
+		return getAwardedCriteria().get(uuid.toString());
+	}
+	
 	public Map<String, HashSet<String>> getAwardedCriteria() {
 		if(awardedCriteria == null) awardedCriteria = new HashMap<>();
 		return awardedCriteria;
