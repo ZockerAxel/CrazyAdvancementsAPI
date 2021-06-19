@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.events.AdvancementScreenCloseEvent;
@@ -15,10 +15,10 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import net.minecraft.server.v1_16_R3.NetworkManager;
-import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayInAdvancements.Status;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.PacketPlayInAdvancements;
+import net.minecraft.network.protocol.game.PacketPlayInAdvancements.Status;
 
 public class AdvancementPacketReceiver {
 	
@@ -64,7 +64,7 @@ public class AdvancementPacketReceiver {
 	}
 	
 	public Channel getNettyChannel(Player p) {
-	    NetworkManager manager = ((CraftPlayer)p).getHandle().playerConnection.networkManager;
+	    NetworkManager manager = ((CraftPlayer)p).getHandle().b.a;
 	    Channel channel = null;
 	    try {
 	        channel = (Channel) channelField.get(manager);
@@ -94,7 +94,7 @@ public class AdvancementPacketReceiver {
 			@Override
 			public boolean handle(Player p, PacketPlayInAdvancements packet) {
 				
-				if(packet.c() == Status.OPENED_TAB) {
+				if(packet.c() == Status.a) {
 					NameKey name = new NameKey(packet.d());
 					AdvancementTabChangeEvent event = new AdvancementTabChangeEvent(p, name);
 					Bukkit.getPluginManager().callEvent(event);

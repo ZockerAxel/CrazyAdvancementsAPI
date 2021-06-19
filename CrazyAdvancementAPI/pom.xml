@@ -4,7 +4,7 @@
 
   <groupId>eu.endercentral.crazy_advancements</groupId>
   <artifactId>CrazyAdvancementsAPI</artifactId>
-  <version>1.14.1a</version>
+  <version>1.14.2</version>
   <packaging>jar</packaging>
 
   <name>CrazyAdvancementsAPI</name>
@@ -18,7 +18,7 @@
     <dependency>
            <groupId>org.spigotmc</groupId>
            <artifactId>spigot-api</artifactId>
-           <version>1.16.5-R0.1-SNAPSHOT</version>
+           <version>1.17-R0.1-SNAPSHOT</version>
            <scope>provided</scope>
     </dependency>
   </dependencies>

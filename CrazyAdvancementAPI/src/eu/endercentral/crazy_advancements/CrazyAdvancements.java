@@ -17,8 +17,8 @@ import org.bukkit.Warning;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_16_R3.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.command.ProxiedNativeCommandSender;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,8 +31,8 @@ import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import net.minecraft.server.v1_16_R3.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayOutSelectAdvancementTab;
+import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
+import net.minecraft.network.protocol.game.PacketPlayOutSelectAdvancementTab;
 
 public final class CrazyAdvancements extends JavaPlugin implements Listener {
 	
@@ -127,7 +127,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 		PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(true, new ArrayList<>(), new HashSet<>(), new HashMap<>());
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			packetReciever.close(p, packetReciever.getHandlers().get(p.getName()));
-			((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer) p).getHandle().b.sendPacket(packet);
 		}
 	}
 	
@@ -175,7 +175,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 	static void setActiveTab(Player player, NameKey rootAdvancement, boolean update) {
 		if(update) {
 			PacketPlayOutSelectAdvancementTab packet = new PacketPlayOutSelectAdvancementTab(rootAdvancement == null ? null : rootAdvancement.getMinecraftKey());
-			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 		openedTabs.put(player.getName(), rootAdvancement);
 	}

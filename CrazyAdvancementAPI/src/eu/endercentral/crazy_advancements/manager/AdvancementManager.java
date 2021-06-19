@@ -17,8 +17,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import com.google.common.reflect.TypeToken;
@@ -41,19 +41,18 @@ import eu.endercentral.crazy_advancements.events.offline.OfflineAdvancementRevok
 import eu.endercentral.crazy_advancements.events.offline.OfflineCriteriaGrantEvent;
 import eu.endercentral.crazy_advancements.events.offline.OfflineCriteriaProgressChangeEvent;
 import eu.endercentral.crazy_advancements.exception.UnloadProgressFailedException;
-import net.minecraft.server.v1_16_R3.AdvancementDisplay;
-import net.minecraft.server.v1_16_R3.AdvancementProgress;
-import net.minecraft.server.v1_16_R3.AdvancementRewards;
-import net.minecraft.server.v1_16_R3.ChatMessageType;
-import net.minecraft.server.v1_16_R3.Criterion;
-import net.minecraft.server.v1_16_R3.CriterionInstance;
-import net.minecraft.server.v1_16_R3.CriterionProgress;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
-import net.minecraft.server.v1_16_R3.ItemStack;
-import net.minecraft.server.v1_16_R3.LootSerializationContext;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
-import net.minecraft.server.v1_16_R3.PacketPlayOutAdvancements;
-import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.advancements.AdvancementDisplay;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.CriterionInstance;
+import net.minecraft.advancements.CriterionProgress;
+import net.minecraft.advancements.critereon.LootSerializationContext;
+import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.world.item.ItemStack;
 
 public final class AdvancementManager {
 	
@@ -220,7 +219,7 @@ public final class AdvancementManager {
 			players.add(player);
 		}
 		
-		Collection<net.minecraft.server.v1_16_R3.Advancement> advs = new ArrayList<>();
+		Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
 		Set<MinecraftKey> remove = new HashSet<>();
 		Map<MinecraftKey, AdvancementProgress> prgs = new HashMap<>();
 		
@@ -289,7 +288,7 @@ public final class AdvancementManager {
 						advRequirements = advancement.getSavedCriteriaRequirements();
 					}
 					
-					net.minecraft.server.v1_16_R3.Advancement adv = new net.minecraft.server.v1_16_R3.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
+					net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
 					
 					advs.add(adv);
 					
@@ -311,7 +310,7 @@ public final class AdvancementManager {
 		
 		//Packet
 		PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advs, remove, prgs);
-		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+		((CraftPlayer)player).getHandle().b.sendPacket(packet);
 	}
 	
 	/**
@@ -322,7 +321,7 @@ public final class AdvancementManager {
 	public void removePlayer(Player player) {
 		players.remove(player);
 		
-		Collection<net.minecraft.server.v1_16_R3.Advancement> advs = new ArrayList<>();
+		Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
 		Set<MinecraftKey> remove = new HashSet<>();
 		Map<MinecraftKey, AdvancementProgress> prgs = new HashMap<>();
 		
@@ -332,7 +331,7 @@ public final class AdvancementManager {
 		
 		//Packet
 		PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advs, remove, prgs);
-		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+		((CraftPlayer)player).getHandle().b.sendPacket(packet);
 	}
 	
 	/**
@@ -341,7 +340,7 @@ public final class AdvancementManager {
 	 * @param advancementsAdded An array of all advancements that should be added<br>If you want to update the display of an advancement, the array must have a length of 1
 	 */
 	public void addAdvancement(eu.endercentral.crazy_advancements.Advancement... advancementsAdded) {
-		HashMap<Player, Collection<net.minecraft.server.v1_16_R3.Advancement>> advancementsList = new HashMap<>();
+		HashMap<Player, Collection<net.minecraft.advancements.Advancement>> advancementsList = new HashMap<>();
 		Set<MinecraftKey> remove = new HashSet<>();
 		HashMap<Player, Map<MinecraftKey, AdvancementProgress>> progressList = new HashMap<>();
 		
@@ -428,7 +427,7 @@ public final class AdvancementManager {
 			AdvancementDisplay saveDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), display.isToastShown(), display.isAnnouncedToChat(), true);
 			saveDisplay.a(display.generateX() - getSmallestY(advancement.getTab()), display.generateY() - getSmallestX(advancement.getTab()));
 			
-			net.minecraft.server.v1_16_R3.Advancement saveAdv = new net.minecraft.server.v1_16_R3.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), saveDisplay, advRewards, advCriteria, advRequirements);
+			net.minecraft.advancements.Advancement saveAdv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), saveDisplay, advRewards, advCriteria, advRequirements);
 			
 			advancement.saveAdvancement(saveAdv);
 			
@@ -438,7 +437,7 @@ public final class AdvancementManager {
 				
 				boolean showToast = display.isToastShown() && getCriteriaProgress(player, advancement) < advancement.getSavedCriteria().size();
 				
-				Collection<net.minecraft.server.v1_16_R3.Advancement> advs = advancementsList.containsKey(player) ? advancementsList.get(player) : new ArrayList<>();
+				Collection<net.minecraft.advancements.Advancement> advs = advancementsList.containsKey(player) ? advancementsList.get(player) : new ArrayList<>();
 				
 				boolean hidden = !display.isVisible(player, advancement);
 				advancement.saveHiddenStatus(player, hidden);
@@ -447,7 +446,7 @@ public final class AdvancementManager {
 					AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
 					advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 					
-					net.minecraft.server.v1_16_R3.Advancement adv = new net.minecraft.server.v1_16_R3.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
+					net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
 					
 					advs.add(adv);
 					
@@ -473,7 +472,7 @@ public final class AdvancementManager {
 		for(Player player : getPlayers()) {
 			//Packet
 			PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advancementsList.get(player), remove, progressList.get(player));
-			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 	}
 	
@@ -483,7 +482,7 @@ public final class AdvancementManager {
 	 * @param advancementsRemoved An array of advancements that should be removed
 	 */
 	public void removeAdvancement(Advancement... advancementsRemoved) {
-		Collection<net.minecraft.server.v1_16_R3.Advancement> advs = new ArrayList<>();
+		Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
 		Set<MinecraftKey> remove = new HashSet<>();
 		Map<MinecraftKey, AdvancementProgress> prgs = new HashMap<>();
 		
@@ -498,7 +497,7 @@ public final class AdvancementManager {
 		for(Player player : getPlayers()) {
 			//Packet
 			PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advs, remove, prgs);
-			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 	}
 	
@@ -555,7 +554,7 @@ public final class AdvancementManager {
 	
 	private void updateProgress(Player player, boolean alreadyGranted, boolean fireEvent, Advancement... advancementsUpdated) {
 		if(players.contains(player)) {
-			Collection<net.minecraft.server.v1_16_R3.Advancement> advs = new ArrayList<>();
+			Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
 			Set<MinecraftKey> remove = new HashSet<>();
 			Map<MinecraftKey, AdvancementProgress> prgs = new HashMap<>();
 			
@@ -634,7 +633,7 @@ public final class AdvancementManager {
 						AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), display.isToastShown(), display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
 						advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 						
-						net.minecraft.server.v1_16_R3.Advancement adv = new net.minecraft.server.v1_16_R3.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
+						net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
 						
 						advs.add(adv);
 					}
@@ -649,7 +648,7 @@ public final class AdvancementManager {
 			}
 			
 			PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advs, remove, prgs);
-			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 	}
 	
@@ -674,7 +673,7 @@ public final class AdvancementManager {
 	 */
 	public void updateVisibility(Player player, Advancement advancement) {
 		if(players.contains(player)) {
-			Collection<net.minecraft.server.v1_16_R3.Advancement> advs = new ArrayList<>();
+			Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
 			Set<MinecraftKey> remove = new HashSet<>();
 			Map<MinecraftKey, AdvancementProgress> prgs = new HashMap<>();
 			
@@ -746,7 +745,7 @@ public final class AdvancementManager {
 					AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
 					advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 					
-					net.minecraft.server.v1_16_R3.Advancement adv = new net.minecraft.server.v1_16_R3.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
+					net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
 					
 					advs.add(adv);
 					
@@ -766,7 +765,7 @@ public final class AdvancementManager {
 			
 			//Packet
 			PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, advs, remove, prgs);
-			((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+			((CraftPlayer)player).getHandle().b.sendPacket(packet);
 		}
 	}
 	
@@ -820,11 +819,10 @@ public final class AdvancementManager {
 	 * @param advancement Advancement Player has received
 	 */
 	public void displayMessage(Player player, Advancement advancement) {
-		IChatBaseComponent message = advancement.getMessage(player);
+		BaseComponent message = advancement.getMessage(player);
 		
-		PacketPlayOutChat packet = new PacketPlayOutChat(message, ChatMessageType.CHAT, CrazyAdvancements.CHAT_MESSAGE_UUID);
-		for(Player receivers : getPlayers()) {
-			((CraftPlayer) receivers).getHandle().playerConnection.sendPacket(packet);
+		for(Player managerPlayer : getPlayers()) {
+			managerPlayer.spigot().sendMessage(ChatMessageType.CHAT, message);
 		}
 	}
 	

@@ -8,7 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.server.v1_16_R3.AdvancementFrameType;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.advancements.AdvancementFrameType;
 
 public class AdvancementDisplay {
 	
@@ -63,9 +65,10 @@ public class AdvancementDisplay {
 	public AdvancementDisplay(Material icon, String title, String description, AdvancementFrame frame, boolean showToast, boolean announceChat, AdvancementVisibility visibility) {
 		this.icon = new ItemStack(icon);
 		this.iconID = icon;
-		if(title.contains("§")) title += "§a";
-		this.title = new JSONMessage("{\"text\":\"" + title.replaceAll("\"", "\\\"") + "\"}");
-		this.description = new JSONMessage("{\"text\":\"" + description.replaceAll("\"", "\\\"") + "\"}");
+		TextComponent titleComponent = new TextComponent(title);
+		titleComponent.setColor(ChatColor.GREEN);
+		this.title = new JSONMessage(titleComponent);
+		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
 		this.showToast = showToast;
 		this.announceChat = announceChat;
@@ -109,9 +112,10 @@ public class AdvancementDisplay {
 	public AdvancementDisplay(Material icon, String title, String description, AdvancementFrame frame, String backgroundTexture, boolean showToast, boolean announceChat, AdvancementVisibility visibility) {
 		this.icon = new ItemStack(icon);
 		this.iconID = icon;
-		if(title.contains("§")) title += "§a";
-		this.title = new JSONMessage("{\"text\":\"" + title.replaceAll("\"", "\\\"") + "\"}");
-		this.description = new JSONMessage("{\"text\":\"" + description.replaceAll("\"", "\\\"") + "\"}");
+		TextComponent titleComponent = new TextComponent(title);
+		titleComponent.setColor(ChatColor.GREEN);
+		this.title = new JSONMessage(titleComponent);
+		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
 		this.backgroundTexture = backgroundTexture;
 		this.showToast = showToast;
@@ -155,9 +159,10 @@ public class AdvancementDisplay {
 	public AdvancementDisplay(ItemStack icon, String title, String description, AdvancementFrame frame, boolean showToast, boolean announceChat, AdvancementVisibility visibility) {
 		this.icon = icon;
 		this.iconID = icon.getType();
-		if(title.contains("§")) title += "§a";
-		this.title = new JSONMessage("{\"text\":\"" + title.replaceAll("\"", "\\\"") + "\"}");
-		this.description = new JSONMessage("{\"text\":\"" + description.replaceAll("\"", "\\\"") + "\"}");
+		TextComponent titleComponent = new TextComponent(title);
+		titleComponent.setColor(ChatColor.GREEN);
+		this.title = new JSONMessage(titleComponent);
+		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
 		this.showToast = showToast;
 		this.announceChat = announceChat;
@@ -201,9 +206,10 @@ public class AdvancementDisplay {
 	public AdvancementDisplay(ItemStack icon, String title, String description, AdvancementFrame frame, String backgroundTexture, boolean showToast, boolean announceChat, AdvancementVisibility visibility) {
 		this.icon = icon;
 		this.iconID = icon.getType();
-		if(title.contains("§")) title += "§a";
-		this.title = new JSONMessage("{\"text\":\"" + title.replaceAll("\"", "\\\"") + "\"}");
-		this.description = new JSONMessage("{\"text\":\"" + description.replaceAll("\"", "\\\"") + "\"}");
+		TextComponent titleComponent = new TextComponent(title);
+		titleComponent.setColor(ChatColor.GREEN);
+		this.title = new JSONMessage(titleComponent);
+		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
 		this.backgroundTexture = backgroundTexture;
 		this.showToast = showToast;
@@ -213,9 +219,9 @@ public class AdvancementDisplay {
 	
 	public static enum AdvancementFrame {
 		
-		TASK(AdvancementFrameType.TASK),
-		GOAL(AdvancementFrameType.GOAL),
-		CHALLENGE(AdvancementFrameType.CHALLENGE)
+		TASK(AdvancementFrameType.a),
+		GOAL(AdvancementFrameType.b),
+		CHALLENGE(AdvancementFrameType.c)
 		;
 		
 		private AdvancementFrameType nms;
@@ -416,8 +422,9 @@ public class AdvancementDisplay {
 	 * @param title New Title {@link String}
 	 */
 	public void setTitle(String title) {
-		if(title.contains("§")) title += "§a";
-		this.title = new JSONMessage("{\"text\":\"" + title.replaceAll("\"", "\\\"") + "\"}");
+		TextComponent titleComponent = new TextComponent(title);
+		titleComponent.setColor(ChatColor.GREEN);
+		this.title = new JSONMessage(titleComponent);
 	}
 	
 	/**
@@ -435,7 +442,7 @@ public class AdvancementDisplay {
 	 * @param title New Title {@link String}
 	 */
 	public void setDescription(String description) {
-		this.description = new JSONMessage("{\"text\":\"" + description.replaceAll("\"", "\\\"") + "\"}");
+		this.description = new JSONMessage(new TextComponent(description));
 	}
 	
 	/**
