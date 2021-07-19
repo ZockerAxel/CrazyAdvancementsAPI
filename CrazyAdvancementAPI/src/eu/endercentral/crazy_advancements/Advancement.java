@@ -244,8 +244,10 @@ public class Advancement {
 		title.addExtra(display.getTitle().getJson());
 		title.addExtra("]");
 		title.setColor(challenge ? ChatColor.DARK_PURPLE : ChatColor.GREEN);
-		Text titleText = new Text(display.getTitle().getJson().getColor().toString() + display.getTitle().getJson());
-		Text descriptionText = new Text(display.getTitle().getJson().getColor().toString() + display.getDescription().getJson().getColor().toString() + display.getDescription().getJson());
+		BaseComponent titleTextComponent = display.getTitle().getJson();
+		titleTextComponent.setColor(title.getColor());
+		Text titleText = new Text(new BaseComponent[] {titleTextComponent});
+		Text descriptionText = new Text(new BaseComponent[] {display.getDescription().getJson()});
 		title.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, titleText, new Text("\n"), descriptionText));
 		message.setWith(Arrays.asList(playerNameText, title));
 		
