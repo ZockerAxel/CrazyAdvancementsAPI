@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.advancements.AdvancementFrameType;
 
@@ -66,7 +65,6 @@ public class AdvancementDisplay {
 		this.icon = new ItemStack(icon);
 		this.iconID = icon;
 		TextComponent titleComponent = new TextComponent(title);
-		titleComponent.setColor(ChatColor.GREEN);
 		this.title = new JSONMessage(titleComponent);
 		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
@@ -113,7 +111,6 @@ public class AdvancementDisplay {
 		this.icon = new ItemStack(icon);
 		this.iconID = icon;
 		TextComponent titleComponent = new TextComponent(title);
-		titleComponent.setColor(ChatColor.GREEN);
 		this.title = new JSONMessage(titleComponent);
 		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
@@ -160,7 +157,6 @@ public class AdvancementDisplay {
 		this.icon = icon;
 		this.iconID = icon.getType();
 		TextComponent titleComponent = new TextComponent(title);
-		titleComponent.setColor(ChatColor.GREEN);
 		this.title = new JSONMessage(titleComponent);
 		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
@@ -207,7 +203,6 @@ public class AdvancementDisplay {
 		this.icon = icon;
 		this.iconID = icon.getType();
 		TextComponent titleComponent = new TextComponent(title);
-		titleComponent.setColor(ChatColor.GREEN);
 		this.title = new JSONMessage(titleComponent);
 		this.description = new JSONMessage(new TextComponent(description));
 		this.frame = frame;
@@ -423,7 +418,6 @@ public class AdvancementDisplay {
 	 */
 	public void setTitle(String title) {
 		TextComponent titleComponent = new TextComponent(title);
-		titleComponent.setColor(ChatColor.GREEN);
 		this.title = new JSONMessage(titleComponent);
 	}
 	
