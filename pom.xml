@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>eu.endercentral.crazy_advancements</groupId>
-  <artifactId>CrazyAdvancementsAPI</artifactId>
+  <groupId>eu.endercentral</groupId>
+  <artifactId>crazy_advancements</artifactId>
   <version>2.0</version>
   <packaging>jar</packaging>
 
