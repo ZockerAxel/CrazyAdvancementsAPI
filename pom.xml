@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <name>CrazyAdvancementsAPI</name>
-  <url>https://crazyadvancements.endercentral.eu</url>
+  <url>https://docs.crazyadvancements.endercentral.eu</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
