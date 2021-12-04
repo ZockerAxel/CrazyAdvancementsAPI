@@ -723,7 +723,7 @@ public final class AdvancementManager {
 	 * @param advancements A list of advancements that will have their progress saved- Leave empty if all Advancements should be saved
 	 */
 	public void saveProgress(Player player, Advancement... advancements) {
-		saveProgress(player.getUniqueId());
+		saveProgress(player.getUniqueId(), advancements);
 	}
 	
 	/**
