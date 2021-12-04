@@ -1,16 +1,16 @@
 package eu.endercentral.crazy_advancements.advancement.progress;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.StreamSupport;
+
+import com.google.common.collect.Iterables;
 
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.CriterionProgress;
 
 public class AdvancementProgress {
 	
-	private HashSet<String> awardedCriteria = new HashSet<>();
 	private net.minecraft.advancements.AdvancementProgress nmsProgress = new net.minecraft.advancements.AdvancementProgress();
 	private long lastUpdate = -1;
 	
@@ -26,12 +26,12 @@ public class AdvancementProgress {
 	public GenericResult grant() {
 		GenericResult result = GenericResult.UNCHANGED;
 		
-		Iterable<String> missing = getNmsProgress().getRemainingCriteria();
+		Iterable<String> missing = getRemainingCriteria();
 		Iterator<String> missingIterator = missing.iterator();
 		
 		while(missingIterator.hasNext()) {
 			String next = missingIterator.next();
-			CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(next);
+			CriterionProgress criterionProgress = getNmsProgress().c(next);
 			setGranted(criterionProgress);
 			result = GenericResult.CHANGED;
 			setLastUpdate();
@@ -48,13 +48,13 @@ public class AdvancementProgress {
 	public GenericResult revoke() {
 		GenericResult result = GenericResult.UNCHANGED;
 		
-		Iterable<String> awarded = getNmsProgress().getAwardedCriteria();
+		Iterable<String> awarded = getAwardedCriteria();
 		Iterator<String> awardedIterator = awarded.iterator();
 		long current = StreamSupport.stream(awarded.spliterator(), false).count();
 		
 		while(current > 0 && awardedIterator.hasNext()) {
 			String next = awardedIterator.next();
-			CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(next);
+			CriterionProgress criterionProgress = getCriterionProgress(next);
 			setUngranted(criterionProgress);
 			current--;
 			result = GenericResult.CHANGED;
@@ -72,22 +72,19 @@ public class AdvancementProgress {
 	 */
 	public GrantCriteriaResult grantCriteria(String... criteria) {
 		GrantCriteriaResult result = GrantCriteriaResult.UNCHANGED;
-		boolean doneBefore = getNmsProgress().isDone();
+		boolean doneBefore = isDone();
 		
 		if(!doneBefore) {//Only grant criteria if the advancement is not already granted
 			for(String criterion : criteria) {
-				if(!awardedCriteria.contains(criterion)) {
-					CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(criterion);
-					if(criterionProgress != null) {
-						setGranted(criterionProgress);
-						awardedCriteria.add(criterion);
-						result = GrantCriteriaResult.CHANGED;
-						setLastUpdate();
-					}
+				CriterionProgress criterionProgress = getCriterionProgress(criterion);
+				if(criterionProgress != null && !isGranted(criterionProgress)) {
+					setGranted(criterionProgress);
+					result = GrantCriteriaResult.CHANGED;
+					setLastUpdate();
 				}
 			}
 			
-			if(getNmsProgress().isDone()) {
+			if(isDone()) {
 				return GrantCriteriaResult.COMPLETED;
 			}
 		}
@@ -104,14 +101,11 @@ public class AdvancementProgress {
 		GenericResult result = GenericResult.UNCHANGED;
 		
 		for(String criterion : criteria) {
-			if(awardedCriteria.contains(criterion)) {
-				CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(criterion);
-				if(criterionProgress != null) {
-					setUngranted(criterionProgress);
-					awardedCriteria.remove(criterion);
-					result = GenericResult.CHANGED;
-					setLastUpdate();
-				}
+			CriterionProgress criterionProgress = getCriterionProgress(criterion);
+			if(criterionProgress != null && isGranted(criterionProgress)) {
+				setUngranted(criterionProgress);
+				result = GenericResult.CHANGED;
+				setLastUpdate();
 			}
 		}
 		
@@ -126,18 +120,18 @@ public class AdvancementProgress {
 	 */
 	public SetCriteriaResult setCriteriaProgress(int number) {
 		SetCriteriaResult result = SetCriteriaResult.UNCHANGED;
-		boolean doneBefore = getNmsProgress().isDone();
+		boolean doneBefore = isDone();
 		
-		Iterable<String> awarded = getNmsProgress().getAwardedCriteria();
+		Iterable<String> awarded = getAwardedCriteria();
 		Iterator<String> awardedIterator = awarded.iterator();
 		long current = StreamSupport.stream(awarded.spliterator(), false).count();
 		
-		Iterable<String> missing = getNmsProgress().getRemainingCriteria();
+		Iterable<String> missing = getRemainingCriteria();
 		Iterator<String> missingIterator = missing.iterator();
 		
 		while(current < number && missingIterator.hasNext()) {
 			String next = missingIterator.next();
-			CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(next);
+			CriterionProgress criterionProgress = getCriterionProgress(next);
 			setGranted(criterionProgress);
 			current++;
 			result = SetCriteriaResult.CHANGED;
@@ -146,35 +140,76 @@ public class AdvancementProgress {
 		
 		while(current > number && awardedIterator.hasNext()) {
 			String next = awardedIterator.next();
-			CriterionProgress criterionProgress = getNmsProgress().getCriterionProgress(next);
+			CriterionProgress criterionProgress = getCriterionProgress(next);
 			setUngranted(criterionProgress);
 			current--;
 			result = SetCriteriaResult.CHANGED;
 			setLastUpdate();
 		}
 		
-		if(!doneBefore && getNmsProgress().isDone()) {
+		if(!doneBefore && isDone()) {
 			result = SetCriteriaResult.COMPLETED;
 		}
 		
 		return result;
 	}
 	
-	private void setGranted(CriterionProgress criterionProgress) {
+	private static void setGranted(CriterionProgress criterionProgress) {
 		criterionProgress.b();
 	}
 	
-	private void setUngranted(CriterionProgress criterionProgress) {
+	private static void setUngranted(CriterionProgress criterionProgress) {
 		criterionProgress.c();
 	}
 	
+	private static boolean isGranted(CriterionProgress criterionProgress) {
+		return criterionProgress.a();
+	}
+	
 	/**
-	 * Gets a list of awarded Criteria
+	 * Gets the remaining Criteria
 	 * 
-	 * @return The list of awarded Criteria Names
+	 * @return The remaining Criteria
 	 */
-	public HashSet<String> getAwardedCriteria() {
-		return new HashSet<>(awardedCriteria);
+	public Iterable<String> getRemainingCriteria() {
+		return getNmsProgress().e();
+	}
+	
+	/**
+	 * Gets the awarded Criteria
+	 * 
+	 * @return The awarded Criteria
+	 */
+	public Iterable<String> getAwardedCriteria() {
+		return getNmsProgress().f();
+	}
+	
+	/**
+	 * Gets the Criteria Progress
+	 * 
+	 * @return The Criteria Progress
+	 */
+	public int getCriteriaProgress() {
+		return Iterables.size(getAwardedCriteria());
+	}
+	
+	/**
+	 * Gets the Criterion Progress Instance by it's name
+	 * 
+	 * @param name The Criterion Name
+	 * @return The CriterionProgress
+	 */
+	public CriterionProgress getCriterionProgress(String name) {
+		return getNmsProgress().c(name);
+	}
+	
+	/**
+	 * Checks whether the Progress is Done
+	 * 
+	 * @return Whether the Progress is Done
+	 */
+	public boolean isDone() {
+		return getNmsProgress().a();
 	}
 	
 	/**

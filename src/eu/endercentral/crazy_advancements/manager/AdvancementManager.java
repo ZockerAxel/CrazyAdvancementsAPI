@@ -17,6 +17,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.google.common.collect.Iterables;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -652,7 +653,7 @@ public final class AdvancementManager {
 	 * @return The criteria progress
 	 */
 	public int getCriteriaProgress(Player player, Advancement advancement) {
-		return advancement.getProgress(player).getAwardedCriteria().size();
+		return advancement.getProgress(player).getCriteriaProgress();
 	}
 	
 	/**
@@ -663,7 +664,7 @@ public final class AdvancementManager {
 	 * @return The criteria progress
 	 */
 	public int getCriteriaProgress(UUID uuid, Advancement advancement) {
-		return advancement.getProgress(uuid).getAwardedCriteria().size();
+		return advancement.getProgress(uuid).getCriteriaProgress();
 	}
 	
 	private String getSavePath(UUID uuid) {
@@ -809,11 +810,11 @@ public final class AdvancementManager {
 		
 		for(CriteriaData progressData : saveFile.getCriteriaData()) {
 			NameKey name = progressData.getName();
-			Set<String> criteria = progressData.getCriteria();
+			Iterable<String> criteria = progressData.getCriteria();
 			
 			for(Advancement advancement: advancementsList) {
 				if(advancement.hasName(name)) {
-					advancement.getProgress(uuid).grantCriteria(criteria.toArray(String[]::new));
+					advancement.getProgress(uuid).grantCriteria(Iterables.toArray(criteria, String.class));
 					break;
 				}
 			}
@@ -877,13 +878,12 @@ public final class AdvancementManager {
 		return player != null && player.isOnline();
 	}
 	
-	private SaveFile generateSaveFile(File file) {
+	private static SaveFile generateSaveFile(File file) {
 		if(file.exists() && file.isFile()) {
 			try {
 				FileReader os = new FileReader(file);
 				
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(os);
+				JsonElement element = JsonParser.parseReader(os);
 				os.close();
 				
 				SaveFile saveFile = SaveFile.fromJSON(element);

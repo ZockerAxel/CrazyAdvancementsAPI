@@ -1,15 +1,13 @@
 package eu.endercentral.crazy_advancements.save;
 
-import java.util.Set;
-
 import eu.endercentral.crazy_advancements.NameKey;
 
 public class CriteriaData {
 	
 	private final NameKey name;
-	private final Set<String> criteria;
+	private final Iterable<String> criteria;
 	
-	public CriteriaData(NameKey name, Set<String> criteria) {
+	public CriteriaData(NameKey name, Iterable<String> criteria) {
 		this.name = name;
 		this.criteria = criteria;
 	}
@@ -18,7 +16,7 @@ public class CriteriaData {
 		return name;
 	}
 	
-	public Set<String> getCriteria() {
+	public Iterable<String> getCriteria() {
 		return criteria;
 	}
 	

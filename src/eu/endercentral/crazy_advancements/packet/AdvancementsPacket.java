@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.NameKey;
@@ -110,7 +110,7 @@ public class AdvancementsPacket {
 	 */
 	public void send() {
 		PacketPlayOutAdvancements packet = build();
-		((CraftPlayer) getPlayer()).getHandle().b.sendPacket(packet);
+		((CraftPlayer) getPlayer()).getHandle().b.a(packet);
 	}
 	
 	
