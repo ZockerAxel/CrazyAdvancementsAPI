@@ -892,7 +892,8 @@ public final class AdvancementManager {
 				//Do nothing
 			}
 		}
-		throw new RuntimeException("Could not read Save File");
+		//Return Empty Save if Save File doesn't exist
+		return new SaveFile(new ArrayList<ProgressData>(), new ArrayList<CriteriaData>());
 	}
 	
 }
