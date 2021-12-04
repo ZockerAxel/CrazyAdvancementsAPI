@@ -369,7 +369,7 @@ public class Advancement {
 	 * @return true if advancement is granted
 	 */
 	public boolean isGranted(Player player) {
-		return getProgress(player).getNmsProgress().a();//TODO Use AdvancementProgress
+		return getProgress(player).isDone();
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public class Advancement {
 	 * @return true if advancement is granted
 	 */
 	public boolean isGranted(UUID uuid) {
-		return getProgress(uuid).getNmsProgress().a();//TODO Use AdvancementProgress
+		return getProgress(uuid).isDone();
 	}
 	
 	/**
