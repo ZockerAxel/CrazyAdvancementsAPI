@@ -31,7 +31,7 @@ public class AdvancementProgress {
 		
 		while(missingIterator.hasNext()) {
 			String next = missingIterator.next();
-			CriterionProgress criterionProgress = getNmsProgress().c(next);
+			CriterionProgress criterionProgress = getCriterionProgress(next);
 			setGranted(criterionProgress);
 			result = GenericResult.CHANGED;
 			setLastUpdate();
