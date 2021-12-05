@@ -9,11 +9,23 @@ import com.google.common.collect.Iterables;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.CriterionProgress;
 
+/**
+ * Represents the progress a Player has made for a specific Advancement
+ * 
+ * @author Axel
+ *
+ */
 public class AdvancementProgress {
 	
 	private net.minecraft.advancements.AdvancementProgress nmsProgress = new net.minecraft.advancements.AdvancementProgress();
 	private long lastUpdate = -1;
 	
+	/**
+	 * Constructor for Creating a Progress Instance
+	 * 
+	 * @param criteria The Criteria
+	 * @param requirements The Requirements
+	 */
 	public AdvancementProgress(Map<String, Criterion> criteria, String[][] requirements) {
 		nmsProgress.a(criteria, requirements);
 	}

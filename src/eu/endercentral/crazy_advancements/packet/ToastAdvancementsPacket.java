@@ -7,6 +7,12 @@ import org.bukkit.entity.Player;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 
+/**
+ * Represents an Advancements Packet for Toast Notifications
+ * 
+ * @author Axel
+ *
+ */
 public class ToastAdvancementsPacket extends AdvancementsPacket {
 	
 	/**

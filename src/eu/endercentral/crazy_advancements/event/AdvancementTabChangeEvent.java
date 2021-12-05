@@ -7,6 +7,12 @@ import org.bukkit.event.HandlerList;
 
 import eu.endercentral.crazy_advancements.NameKey;
 
+/**
+ * Called when a Player opens their Advancement Screen or changes their Advancement Tab
+ * 
+ * @author Axel
+ *
+ */
 public class AdvancementTabChangeEvent extends Event implements Cancellable {
 	
 	public static final HandlerList handlers = new HandlerList();
@@ -35,6 +41,12 @@ public class AdvancementTabChangeEvent extends Event implements Cancellable {
 	private NameKey tabAdvancement;
 	private boolean cancelled;
 	
+	/**
+	 * Constructor for instantiating this Event
+	 * 
+	 * @param player The Player
+	 * @param tabAdvancement The selected Tab
+	 */
 	public AdvancementTabChangeEvent(Player player, NameKey tabAdvancement) {
 		super(true);
 		this.player = player;
@@ -42,16 +54,18 @@ public class AdvancementTabChangeEvent extends Event implements Cancellable {
 	}
 	
 	/**
+	 * Gets the Player
 	 * 
-	 * @return Player changing his advancement tab
+	 * @return The Player
 	 */
 	public Player getPlayer() {
 		return player;
 	}
 	
 	/**
+	 * Gets the selected Tab
 	 * 
-	 * @return Tab the Player is changing to
+	 * @return The selected Tab
 	 */
 	public NameKey getTabAdvancement() {
 		return tabAdvancement;
@@ -68,6 +82,7 @@ public class AdvancementTabChangeEvent extends Event implements Cancellable {
 	
 	
 	/**
+	 * Gets an informative String for debugging purposes
 	 * 
 	 * @return Information about this event
 	 */

@@ -16,6 +16,12 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
 import net.minecraft.resources.MinecraftKey;
 
+/**
+ * Represents an Advancements Packet
+ * 
+ * @author Axel
+ *
+ */
 public class AdvancementsPacket {
 	
 	private final Player player;

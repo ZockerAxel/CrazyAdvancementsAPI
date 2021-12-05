@@ -10,6 +10,12 @@ import com.google.gson.JsonElement;
 
 import eu.endercentral.crazy_advancements.NameKey;
 
+/**
+ * Represents a Save File
+ * 
+ * @author Axel
+ *
+ */
 public class SaveFile {
 	
 	private static final Gson gson = new Gson();
@@ -20,7 +26,7 @@ public class SaveFile {
 	/**
 	 * Constructor for creating a Save File
 	 * 
-	 * @param data A list of Advancement Progress that is saved by progress number
+	 * @param progressData A list of Advancement Progress that is saved by progress number
 	 * @param criteriaData A list of Advancement Progress that is saved by criteria list
 	 */
 	public SaveFile(List<ProgressData> progressData, List<CriteriaData> criteriaData) {
@@ -74,7 +80,7 @@ public class SaveFile {
 	/**
 	 * Converts this Save File to JSON
 	 * 
-	 * @return
+	 * @return the JSON String
 	 */
 	public String toJson() {
 		return gson.toJson(this);

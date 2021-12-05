@@ -28,6 +28,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
+/**
+ * Represents an Advancement
+ * 
+ * @author Axel
+ * 
+ */
 public class Advancement {
 	
 	private final NameKey name;
@@ -330,10 +336,10 @@ public class Advancement {
 	}
 	
 	/**
-	 * Gets a player's progress
+	 * Gets a Player's progress
 	 * 
 	 * @param uuid The uuid of the player to check
-	 * @return
+	 * @return The Player's progress
 	 */
 	public AdvancementProgress getProgress(UUID uuid) {
 		if(!progressMap.containsKey(uuid.toString())) {
@@ -416,6 +422,7 @@ public class Advancement {
 	/**
 	 * Gets a Toast Notification for this Advancement
 	 * 
+	 * @return The Toast Notification
 	 */
 	public ToastNotification getToastNotification() {
 		ToastNotification notification = new ToastNotification(getDisplay().getIcon(), getDisplay().getTitle(), getDisplay().getFrame());
@@ -436,7 +443,7 @@ public class Advancement {
 	 * Gets an Advancement Message
 	 * 
 	 * @param player Player who has recieved the advancement
-	 * @return
+	 * @return The Advancement Message as a Base Component
 	 */
 	public BaseComponent getMessage(Player player) {
 		String translation = "chat.type.advancement." + display.getFrame().name().toLowerCase();

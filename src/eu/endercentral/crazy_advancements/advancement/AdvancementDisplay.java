@@ -10,6 +10,12 @@ import eu.endercentral.crazy_advancements.JSONMessage;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.advancements.AdvancementFrameType;
 
+/**
+ * Represents the Display Information of an Advancement
+ * 
+ * @author Axel
+ *
+ */
 public class AdvancementDisplay {
 	
 	private ItemStack icon;
@@ -28,8 +34,6 @@ public class AdvancementDisplay {
 	 * @param title Title {@link JSONMessage}
 	 * @param description Description {@link JSONMessage}
 	 * @param frame {@link AdvancementFrame}
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(Material icon, JSONMessage title, JSONMessage description, AdvancementFrame frame, AdvancementVisibility visibility) {
@@ -46,8 +50,6 @@ public class AdvancementDisplay {
 	 * @param title Title {@link String}
 	 * @param description Description {@link String}
 	 * @param frame {@link AdvancementFrame}
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(Material icon, String title, String description, AdvancementFrame frame, AdvancementVisibility visibility) {
@@ -66,8 +68,6 @@ public class AdvancementDisplay {
 	 * @param description Description {@link JSONMessage}
 	 * @param frame {@link AdvancementFrame}
 	 * @param backgroundTexture Background texture path
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(Material icon, JSONMessage title, JSONMessage description, AdvancementFrame frame, String backgroundTexture, AdvancementVisibility visibility) {
@@ -86,8 +86,6 @@ public class AdvancementDisplay {
 	 * @param description Description {@link String}
 	 * @param frame {@link AdvancementFrame}
 	 * @param backgroundTexture Background texture path
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(Material icon, String title, String description, AdvancementFrame frame, String backgroundTexture, AdvancementVisibility visibility) {
@@ -108,8 +106,6 @@ public class AdvancementDisplay {
 	 * @param title Title {@link JSONMessage}
 	 * @param description Description {@link JSONMessage}
 	 * @param frame {@link AdvancementFrame}
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(ItemStack icon, JSONMessage title, JSONMessage description, AdvancementFrame frame, AdvancementVisibility visibility) {
@@ -126,8 +122,6 @@ public class AdvancementDisplay {
 	 * @param title Title {@link String}
 	 * @param description Description {@link String}
 	 * @param frame {@link AdvancementFrame}
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(ItemStack icon, String title, String description, AdvancementFrame frame, AdvancementVisibility visibility) {
@@ -146,8 +140,6 @@ public class AdvancementDisplay {
 	 * @param description Description {@link JSONMessage}
 	 * @param frame {@link AdvancementFrame}
 	 * @param backgroundTexture Background texture path
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(ItemStack icon, JSONMessage title, JSONMessage description, AdvancementFrame frame, String backgroundTexture, AdvancementVisibility visibility) {
@@ -166,8 +158,6 @@ public class AdvancementDisplay {
 	 * @param description Description {@link String}
 	 * @param frame {@link AdvancementFrame}
 	 * @param backgroundTexture Background texture path
-	 * @param showToast Should toast messages be shown
-	 * @param announceChat Should advancements be announced in chat
 	 * @param visibility When an advancement is visible
 	 */
 	public AdvancementDisplay(ItemStack icon, String title, String description, AdvancementFrame frame, String backgroundTexture, AdvancementVisibility visibility) {
@@ -180,10 +170,25 @@ public class AdvancementDisplay {
 		setVisibility(visibility);
 	}
 	
+	/**
+	 * Represents the Frame of an Advancement
+	 * 
+	 * @author Axel
+	 *
+	 */
 	public static enum AdvancementFrame {
 		
+		/**
+		 * A Task has the default Frame and defaults to a green Color in Completion Messages
+		 */
 		TASK(AdvancementFrameType.a),
+		/**
+		 * A Goal has a rounded off Frame and defaults to a green Color in Completion Messages
+		 */
 		GOAL(AdvancementFrameType.b),
+		/**
+		 * A Challenge has a differently shaped Frame and defaults to a purple Color in Completion Messages and it's Toast plays a Sound when displayed
+		 */
 		CHALLENGE(AdvancementFrameType.c)
 		;
 		
@@ -193,6 +198,11 @@ public class AdvancementDisplay {
 			this.nms = nms;
 		}
 		
+		/**
+		 * Get the NMS Representation of this AdvancementFrame
+		 * 
+		 * @return THE NMS Representation
+		 */
 		public AdvancementFrameType getNMS() {
 			return nms;
 		}
@@ -365,7 +375,7 @@ public class AdvancementDisplay {
 	/**
 	 * Changes the Description
 	 * 
-	 * @param title New title {@link JSONMessage}
+	 * @param description New description {@link JSONMessage}
 	 */
 	public void setDescription(JSONMessage description) {
 		this.description = description;
@@ -374,7 +384,7 @@ public class AdvancementDisplay {
 	/**
 	 * Changes the Description
 	 * 
-	 * @param title New Title {@link String}
+	 * @param description New Description {@link String}
 	 */
 	public void setDescription(String description) {
 		this.description = new JSONMessage(new TextComponent(description));

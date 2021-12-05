@@ -38,6 +38,12 @@ import eu.endercentral.crazy_advancements.save.CriteriaData;
 import eu.endercentral.crazy_advancements.save.ProgressData;
 import eu.endercentral.crazy_advancements.save.SaveFile;
 
+/**
+ * Represents a Manager that manages Players and Advancements
+ * 
+ * @author Axel
+ *
+ */
 public final class AdvancementManager {
 	
 	private static HashMap<String, AdvancementManager> accessibleManagers = new HashMap<>();
@@ -45,7 +51,7 @@ public final class AdvancementManager {
 	/**
 	 * Gets an accessible Advancement Manager by it's Name
 	 * 
-	 * @param name
+	 * @param name The Name of the Manager
 	 * @return the Manager or null if no matching Manager is found
 	 */
 	public static AdvancementManager getAccessibleManager(NameKey name) {
@@ -68,6 +74,7 @@ public final class AdvancementManager {
 	/**
 	 * Constructor for creating Advancement Managers
 	 * 
+	 * @param name The Name of the Manager
 	 * @param players All players that should be in the new manager from the start, can be changed at any time
 	 */
 	public AdvancementManager(NameKey name, Player... players) {
@@ -553,7 +560,7 @@ public final class AdvancementManager {
 	 * Revokes criteria for an advancement
 	 * 
 	 * @param player Receiver
-	 * @param advancement
+	 * @param advancement The Advancement
 	 * @param criteria Array of criteria to revoke
 	 * @return The Result of this operation
 	 */
@@ -587,7 +594,7 @@ public final class AdvancementManager {
 	}
 	
 	/**
-	 * Sets the criteria progress for an advancement<br>Only works for Advancements with {@link CriteriaType.NUMBER} and will return {@link SetCriteriaResult.INVALID} if it doesn't match
+	 * Sets the criteria progress for an advancement<br>Only works for Advancements with {@link CriteriaType} Number and will return {@link SetCriteriaResult} INVALID if it doesn't match
 	 * 
 	 * @param player Receiver
 	 * @param advancement The Advancement
@@ -624,11 +631,11 @@ public final class AdvancementManager {
 	}
 	
 	/**
-	 * Sets the criteria progress for an advancement, also works with offline players<br>Only works for Advancements with {@link CriteriaType.NUMBER} and will return {@link SetCriteriaResult.INVALID} if it doesn't match
+	 * Sets the criteria progress for an advancement, also works with offline players<br>Only works for Advancements with {@link CriteriaType} NUMBER and will return {@link SetCriteriaResult} INVALID if it doesn't match
 	 * 
 	 * @param uuid Receiver
 	 * @param advancement The Advancement
-	 * @param criteria Array of criteria to revoke
+	 * @param criteriaProgress Array of criteria to revoke
 	 * @return The Result of this operation
 	 */
 	public SetCriteriaResult setCriteriaProgress(UUID uuid, Advancement advancement, int criteriaProgress) {
@@ -779,7 +786,7 @@ public final class AdvancementManager {
 	 * Loads the progress for Advancements in this Manager
 	 * 
 	 * @param player Player to load
-	 * @param json The JSON data to be loaded from
+	 * @param saveFile The Save File to be loaded from
 	 * @param advancements A list of advancements that will have their progress loaded - Leave empty if all Advancements should be loaded
 	 */
 	public void loadProgress(Player player, SaveFile saveFile, Advancement... advancements) {
@@ -790,7 +797,7 @@ public final class AdvancementManager {
 	 * Loads the progress for Advancements in this Manager
 	 * 
 	 * @param uuid UUID of Player to load
-	 * @param json The JSON data to be loaded from
+	 * @param saveFile The Save File to be loaded from
 	 * @param advancements A list of advancements that will have their progress loaded - Leave empty if all Advancements should be loaded
 	 */
 	public void loadProgress(UUID uuid, SaveFile saveFile, Advancement... advancements) {

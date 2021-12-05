@@ -12,6 +12,12 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay.Advance
 import eu.endercentral.crazy_advancements.packet.ToastAdvancementsPacket;
 import net.md_5.bungee.api.chat.TextComponent;
 
+/**
+ * Represents a Toast Notification
+ * 
+ * @author Axel
+ *
+ */
 public class ToastNotification {
 	
 	private final ItemStack icon;
@@ -104,7 +110,7 @@ public class ToastNotification {
 	/**
 	 * Gets the Frame
 	 * 
-	 * @return
+	 * @return The Frame
 	 */
 	public AdvancementFrame getFrame() {
 		return frame;

@@ -2,6 +2,12 @@ package eu.endercentral.crazy_advancements;
 
 import net.minecraft.resources.MinecraftKey;
 
+/**
+ * Represents a Unique Name
+ * 
+ * @author Axel
+ *
+ */
 public class NameKey {
 	
 	private final String namespace;
@@ -10,8 +16,9 @@ public class NameKey {
 	private transient MinecraftKey mcKey;
 	
 	/**
+	 * Constructor for creating a NameKey
 	 * 
-	 * @param namespace The namespace, choose something representing your plugin/project
+	 * @param namespace The namespace, choose something representing your plugin/project/subproject
 	 * @param key The Unique key inside your namespace
 	 */
 	public NameKey(String namespace, String key) {
@@ -20,6 +27,7 @@ public class NameKey {
 	}
 	
 	/**
+	 * Constructor for creating a NameKey
 	 * 
 	 * @param key The key inside the default namespace "minecraft" or a NameSpacedKey seperated by a colon
 	 */
@@ -37,7 +45,7 @@ public class NameKey {
 	/**
 	 * Generates a {@link NameKey}
 	 * 
-	 * @param from
+	 * @param from The MinecraftKey to generate from
 	 */
 	public NameKey(MinecraftKey from) {
 		this.namespace = from.b().toLowerCase();
@@ -45,6 +53,7 @@ public class NameKey {
 	}
 	
 	/**
+	 * Gets the namespace
 	 * 
 	 * @return The namespace
 	 */
@@ -53,6 +62,7 @@ public class NameKey {
 	}
 	
 	/**
+	 * Gets the key
 	 * 
 	 * @return The key
 	 */

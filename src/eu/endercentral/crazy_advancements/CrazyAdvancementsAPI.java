@@ -36,10 +36,19 @@ import net.minecraft.advancements.critereon.LootSerializationContext;
 import net.minecraft.network.protocol.game.PacketPlayOutSelectAdvancementTab;
 import net.minecraft.resources.MinecraftKey;
 
+/**
+ * Represents the API's Plugin
+ * 
+ * @author Axel
+ *
+ */
 public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	
 	private static CrazyAdvancementsAPI instance;
 	
+	/**
+	 * Criterion Instance for Internal Use
+	 */
 	public static final Criterion CRITERION = new Criterion(new CriterionInstance() {
 		@Override
 		public JsonObject a(LootSerializationContext arg0) {
@@ -81,6 +90,11 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		}
 	}
 	
+	/**
+	 * Gets the Instance
+	 * 
+	 * @return The Instance
+	 */
 	public static CrazyAdvancementsAPI getInstance() {
 		return instance;
 	}

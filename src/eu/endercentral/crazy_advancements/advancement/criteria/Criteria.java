@@ -7,6 +7,12 @@ import java.util.HashMap;
 import eu.endercentral.crazy_advancements.CrazyAdvancementsAPI;
 import net.minecraft.advancements.Criterion;
 
+/**
+ * Represents the Criteria that is required for an Advancement
+ * 
+ * @author Axel
+ *
+ */
 public class Criteria {
 	
 	private final CriteriaType type;
@@ -19,7 +25,7 @@ public class Criteria {
 	private final HashMap<String, Criterion> criteria = new HashMap<>();
 	
 	/**
-	 * Constructor for creating {@link CriteriaType.NUMBER} which will require a certain number
+	 * Constructor for creating {@link CriteriaType} NUMBER which will require a certain number
 	 * 
 	 * @param requiredNumber The required number
 	 */
@@ -41,7 +47,7 @@ public class Criteria {
 	}
 	
 	/**
-	 * Constructor for creating {@link CriteriaType.LIST} which will require a list of actions that need to be completed<br>
+	 * Constructor for creating {@link CriteriaType} LIST which will require a list of actions that need to be completed<br>
 	 * For further details see <a href="https://minecraft.fandom.com/wiki/Advancement/JSON_format">Advancement/JSON Format</a> on the Minecraft Wiki
 	 * 
 	 * @param actionNames The names of all occuring actions
@@ -68,7 +74,7 @@ public class Criteria {
 	}
 	
 	/**
-	 * Gets the required Number (only applies for {@link CriteriaType.NUMBER})
+	 * Gets the required Number (only applies for {@link CriteriaType} NUMBER)
 	 * 
 	 * @return The Required Number
 	 */
@@ -77,7 +83,7 @@ public class Criteria {
 	}
 	
 	/**
-	 * Gets the Action Names (auto-generated when using {@link CriteriaType.NUMBER})
+	 * Gets the Action Names (auto-generated when using {@link CriteriaType} NUMBER)
 	 * 
 	 * @return The Actions
 	 */
@@ -86,7 +92,7 @@ public class Criteria {
 	}
 	
 	/**
-	 * Gets the Requirements (auto-generated when using {@link CriteriaType.NUMBER})
+	 * Gets the Requirements (auto-generated when using {@link CriteriaType} NUMBER)
 	 * 
 	 * @return The Requirementsn 
 	 */

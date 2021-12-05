@@ -4,15 +4,29 @@ import java.util.Arrays;
 
 import org.bukkit.entity.Player;
 
+/**
+ * Represents the conditions under which an Advancement is visible
+ * 
+ * @author Axel
+ *
+ */
 public abstract class AdvancementVisibility {
 	
+	/**
+	 * Advancements with this Visibility will always be visible
+	 */
 	public static final AdvancementVisibility ALWAYS = new AdvancementVisibility("ALWAYS") {
 		
 		@Override
 		public boolean isVisible(Player player, Advancement advancement) {
 			return true;
 		}
-	}, PARENT_GRANTED = new AdvancementVisibility("PARENT_GRANTED") {
+	};
+	
+	/**
+	 * Advancements with this Visibility will be visible once their parent or any of their children is granted
+	 */
+	public static final AdvancementVisibility PARENT_GRANTED = new AdvancementVisibility("PARENT_GRANTED") {
 		
 		@Override
 		public boolean isVisible(Player player, Advancement advancement) {
@@ -21,7 +35,12 @@ public abstract class AdvancementVisibility {
 			
 			return parent == null || parent.isGranted(player);
 		}
-	}, VANILLA = new AdvancementVisibility("VANILLA") {
+	};
+	
+	/**
+	 * Advancements with this Visibility will be visible once their parent or grandparent or any of their children is granted (Similar to Vanilla behavior)
+	 */
+	public static final AdvancementVisibility VANILLA = new AdvancementVisibility("VANILLA") {
 		
 		@Override
 		public boolean isVisible(Player player, Advancement advancement) {
@@ -37,7 +56,12 @@ public abstract class AdvancementVisibility {
 			
 			return true;
 		}
-	}, HIDDEN = new AdvancementVisibility("HIDDEN") {
+	};
+	
+	/**
+	 * Advancements with this Visibility will be visible once they are granted or any of their children is granted (Similar to Vanilla "hidden")
+	 */
+	public static final AdvancementVisibility HIDDEN = new AdvancementVisibility("HIDDEN") {
 		
 		@Override
 		public boolean isVisible(Player player, Advancement advancement) {
@@ -47,6 +71,9 @@ public abstract class AdvancementVisibility {
 	
 	private final String name;
 	
+	/**
+	 * Constructor for creating custom Advancement Visibility
+	 */
 	public AdvancementVisibility() {
 		name = "CUSTOM";
 	}

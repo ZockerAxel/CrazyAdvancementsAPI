@@ -47,7 +47,6 @@ public class PacketConverter {
 	 * Creates an NMS Advancement
 	 * 
 	 * @param advancement The Advancement to use as a base
-	 * @param hidden Whether the Advancement will have it's hidden boolean set to true
 	 * @return The NMS Advancement
 	 */
 	public static net.minecraft.advancements.Advancement toNmsAdvancement(Advancement advancement) {
@@ -78,7 +77,6 @@ public class PacketConverter {
 	 * Creates an NMS Toast Advancement
 	 * 
 	 * @param advancement The Advancement to use as a base
-	 * @param hidden Whether the Advancement will have it's hidden boolean set to true
 	 * @return The NMS Advancement
 	 */
 	public static net.minecraft.advancements.Advancement toNmsToastAdvancement(Advancement advancement) {

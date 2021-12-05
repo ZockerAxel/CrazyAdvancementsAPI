@@ -5,27 +5,36 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 
+/**
+ * Represents a Message in JSON Format
+ * 
+ * @author Axel
+ *
+ */
 public class JSONMessage {
 	
 	private final BaseComponent json;
 	
 	/**
+	 * Constructor for creating a JSON Message
 	 * 
-	 * @param json A JSON representation of an ingame Message {@link <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Read More</a>}
+	 * @param json A JSON representation of an ingame Message <a href="https://www.spigotmc.org/wiki/the-chat-component-api/">Read More</a>
 	 */
 	public JSONMessage(BaseComponent json) {
 		this.json = json;
 	}
 	
 	/**
+	 * Gets the Message as a BaseComponent
 	 * 
-	 * @return the JSON representation of an ingame Message
+	 * @return the BaseComponent of an ingame Message
 	 */
 	public BaseComponent getJson() {
 		return json;
 	}
 	
 	/**
+	 * Gets an NMS representation of an ingame Message
 	 * 
 	 * @return An {@link IChatBaseComponent} representation of an ingame Message
 	 */
