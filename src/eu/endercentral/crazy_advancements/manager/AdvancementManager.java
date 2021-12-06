@@ -748,7 +748,7 @@ public final class AdvancementManager {
 		saveFile.merge(newSaveFile);//Merge new Save Data onto existing Data so nothing gets lost
 		
 		try {
-			if(!file.exists()) {
+			if(!file.exists() || !file.isFile()) {
 				file.createNewFile();
 			}
 			FileWriter w = new FileWriter(file);
