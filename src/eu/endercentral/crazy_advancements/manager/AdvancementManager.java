@@ -680,7 +680,7 @@ public final class AdvancementManager {
 	
 	private File getSaveFile(UUID uuid) {
 		File file = new File(getSavePath(uuid));
-		file.mkdirs();
+		file.getParentFile().mkdirs();
 		return file;
 	}
 	
