@@ -8,8 +8,6 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import eu.endercentral.crazy_advancements.NameKey;
-
 /**
  * Represents a Save File
  * 
@@ -20,8 +18,8 @@ public class SaveFile {
 	
 	private static final Gson gson = new Gson();
 	
-	private final Map<NameKey, ProgressData> progressData;
-	private final Map<NameKey, CriteriaData> criteriaData;
+	private final Map<String, ProgressData> progressData;
+	private final Map<String, CriteriaData> criteriaData;
 	
 	/**
 	 * Constructor for creating a Save File
@@ -32,12 +30,12 @@ public class SaveFile {
 	public SaveFile(List<ProgressData> progressData, List<CriteriaData> criteriaData) {
 		this.progressData = new HashMap<>();
 		for(ProgressData progress : progressData) {
-			this.progressData.put(progress.getName(), progress);
+			this.progressData.put(progress.getName().toString(), progress);
 		}
 		
 		this.criteriaData = new HashMap<>();
 		for(CriteriaData criteria : criteriaData) {
-			this.criteriaData.put(criteria.getName(), criteria);
+			this.criteriaData.put(criteria.getName().toString(), criteria);
 		}
 	}
 	
@@ -68,12 +66,12 @@ public class SaveFile {
 	public void merge(SaveFile saveFile) {
 		//Merge Progress Data
 		for(ProgressData progress : saveFile.getProgressData()) {
-			this.progressData.put(progress.getName(), progress);
+			this.progressData.put(progress.getName().toString(), progress);
 		}
 		
 		//Merge Criteria Data
 		for(CriteriaData criteria : saveFile.getCriteriaData()) {
-			this.criteriaData.put(criteria.getName(), criteria);
+			this.criteriaData.put(criteria.getName().toString(), criteria);
 		}
 	}
 	
