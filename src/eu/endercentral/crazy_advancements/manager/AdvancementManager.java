@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -714,7 +715,7 @@ public final class AdvancementManager {
 				progressData.add(new ProgressData(advancement.getName(), getCriteriaProgress(uuid, advancement)));
 				break;
 			case LIST:
-				criteriaData.add(new CriteriaData(advancement.getName(), advancement.getProgress(uuid).getAwardedCriteria()));
+				criteriaData.add(new CriteriaData(advancement.getName(), Lists.newArrayList(advancement.getProgress(uuid).getAwardedCriteria())));
 				break;
 			}
 		}
@@ -808,7 +809,7 @@ public final class AdvancementManager {
 			int progress = progressData.getProgress();
 			
 			for(Advancement advancement: advancementsList) {
-				if(advancement.hasName(name)) {
+				if(advancement.getCriteria().getType() == CriteriaType.NUMBER && advancement.hasName(name)) {
 					advancement.getProgress(uuid).setCriteriaProgress(progress);
 					break;
 				}
@@ -820,7 +821,7 @@ public final class AdvancementManager {
 			Iterable<String> criteria = progressData.getCriteria();
 			
 			for(Advancement advancement: advancementsList) {
-				if(advancement.hasName(name)) {
+				if(advancement.getCriteria().getType() == CriteriaType.LIST && advancement.hasName(name)) {
 					advancement.getProgress(uuid).grantCriteria(Iterables.toArray(criteria, String.class));
 					break;
 				}
@@ -896,7 +897,8 @@ public final class AdvancementManager {
 				SaveFile saveFile = SaveFile.fromJSON(element);
 				return saveFile;
 			} catch (Exception ex) {
-				//Do nothing
+				System.err.println("Unable to read Save File!");
+				ex.printStackTrace();
 			}
 		}
 		//Return Empty Save if Save File doesn't exist

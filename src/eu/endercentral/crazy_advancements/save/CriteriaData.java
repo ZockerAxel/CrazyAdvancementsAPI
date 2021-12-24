@@ -1,5 +1,7 @@
 package eu.endercentral.crazy_advancements.save;
 
+import java.util.List;
+
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.criteria.CriteriaType;
 
@@ -12,7 +14,7 @@ import eu.endercentral.crazy_advancements.advancement.criteria.CriteriaType;
 public class CriteriaData {
 	
 	private final NameKey name;
-	private final Iterable<String> criteria;
+	private final List<String> criteria;
 	
 	/**
 	 * Constructor for creating CriteriaData
@@ -20,7 +22,7 @@ public class CriteriaData {
 	 * @param name The Unique Name of the Advancement
 	 * @param criteria The Criteria that has been awarded
 	 */
-	public CriteriaData(NameKey name, Iterable<String> criteria) {
+	public CriteriaData(NameKey name, List<String> criteria) {
 		this.name = name;
 		this.criteria = criteria;
 	}
@@ -39,7 +41,7 @@ public class CriteriaData {
 	 * 
 	 * @return The Criteria
 	 */
-	public Iterable<String> getCriteria() {
+	public List<String> getCriteria() {
 		return criteria;
 	}
 	
