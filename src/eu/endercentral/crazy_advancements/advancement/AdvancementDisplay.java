@@ -457,7 +457,7 @@ public class AdvancementDisplay {
 	 * 
 	 * @param positionOrigin New position origin
 	 */
-	public void setPositionOrigin(Advancement positionOrigin) {
+	public void setPositionOrigin(@Nullable Advancement positionOrigin) {
 		this.positionOrigin = positionOrigin;
 	}
 	
