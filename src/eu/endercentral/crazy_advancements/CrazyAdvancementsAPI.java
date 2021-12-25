@@ -211,6 +211,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			packetReciever.initPlayer(player);
+			fileAdvancementManager.loadProgress(player);
 			fileAdvancementManager.addPlayer(player);
 		}
 		
@@ -250,6 +251,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		packetReciever.initPlayer(player);
 		
 		//Add Player to File Advancement Manager
+		fileAdvancementManager.loadProgress(player);
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			
 			@Override
@@ -411,6 +413,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 												}
 												
 												if(success) {
+													if(fileAdvancementManager.equals(manager)) {
+														fileAdvancementManager.saveProgress(player, advancement);
+													}
 													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " §afor '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
 												} else {
 													sender.sendMessage("§cCriteria " + criteriaString + " §afor '§e" + advancement.getName() + "§a' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
@@ -430,6 +435,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 												}
 												
 												if(success) {
+													if(fileAdvancementManager.equals(manager)) {
+														fileAdvancementManager.saveProgress(player, advancement);
+													}
 													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
 												} else {
 													sender.sendMessage("§cAdvancement '§e" + advancement.getName() + "§a' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
@@ -488,6 +496,10 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 												
 												int progress = Integer.parseInt(args[3]);
 												manager.setCriteriaProgress(player, advancement, progress);
+												
+												if(fileAdvancementManager.equals(manager)) {
+													fileAdvancementManager.saveProgress(player, advancement);
+												}
 												
 												sender.sendMessage("§aSuccessfully set Criteria Progress to " + progress + " §afor Advancement '§e" + advancement.getName() + "§a' for Player §b" + player.getName());
 											}
