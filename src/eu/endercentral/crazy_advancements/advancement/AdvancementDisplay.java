@@ -185,11 +185,11 @@ public class AdvancementDisplay {
 		/**
 		 * A Goal has a rounded off Frame and defaults to a green Color in Completion Messages
 		 */
-		GOAL(AdvancementFrameType.b),
+		GOAL(AdvancementFrameType.c),
 		/**
 		 * A Challenge has a differently shaped Frame and defaults to a purple Color in Completion Messages and it's Toast plays a Sound when displayed
 		 */
-		CHALLENGE(AdvancementFrameType.c)
+		CHALLENGE(AdvancementFrameType.b)
 		;
 		
 		private AdvancementFrameType nms;
