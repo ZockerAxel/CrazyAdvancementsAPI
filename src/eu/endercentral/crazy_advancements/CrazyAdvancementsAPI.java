@@ -177,7 +177,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		
 		for(File file : files) {
 			if(file.isDirectory()) {
-				advancements.putAll(loadNamespace(namespace, file.getName() + "/", file));
+				advancements.putAll(loadNamespace(namespace, path + file.getName() + "/", file));
 			} else if(file.isFile() && file.getName().endsWith(".json")) {
 				FileReader os = null;
 				try {
