@@ -3,6 +3,7 @@ package eu.endercentral.crazy_advancements.manager;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -888,8 +889,9 @@ public final class AdvancementManager {
 	
 	private static SaveFile generateSaveFile(File file) {
 		if(file.exists() && file.isFile()) {
+			FileReader os = null;
 			try {
-				FileReader os = new FileReader(file);
+				os = new FileReader(file);
 				
 				JsonElement element = JsonParser.parseReader(os);
 				os.close();
@@ -897,6 +899,13 @@ public final class AdvancementManager {
 				SaveFile saveFile = SaveFile.fromJSON(element);
 				return saveFile;
 			} catch (Exception ex) {
+				if(os != null) {
+					try {
+						os.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				System.err.println("Unable to read Save File!");
 				ex.printStackTrace();
 			}

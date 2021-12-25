@@ -207,6 +207,21 @@ public class AdvancementDisplay {
 			return nms;
 		}
 		
+		/**
+		 * Parses the AdvancementFrame by it's name
+		 * 
+		 * @param name The case-insensitive name
+		 * @return The AdvancementFrame
+		 */
+		public static AdvancementFrame parse(String name) {
+			for(AdvancementFrame frame : values()) {
+				if(frame.name().equalsIgnoreCase(name)) {
+					return frame;
+				}
+			}
+			return TASK;
+		}
+		
 	}
 	
 	/**

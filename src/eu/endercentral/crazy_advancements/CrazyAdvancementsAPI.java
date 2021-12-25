@@ -1,9 +1,14 @@
 package eu.endercentral.crazy_advancements;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -20,14 +25,24 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.advancement.Advancement;
+import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay.AdvancementFrame;
+import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
+import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import eu.endercentral.crazy_advancements.advancement.ToastNotification;
 import eu.endercentral.crazy_advancements.advancement.criteria.CriteriaType;
 import eu.endercentral.crazy_advancements.advancement.progress.GenericResult;
 import eu.endercentral.crazy_advancements.advancement.progress.GrantCriteriaResult;
+import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancement;
+import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancementDisplay;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import eu.endercentral.crazy_advancements.packet.AdvancementsPacket;
 import net.minecraft.advancements.Criterion;
@@ -44,8 +59,13 @@ import net.minecraft.resources.MinecraftKey;
  */
 public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	
+	private static final Gson gson;
 	private static final List<String> SELECTORS = Arrays.asList("@a", "@p", "@s", "@r");
 	private static CrazyAdvancementsAPI instance;
+	
+	static {
+		gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+	}
 	
 	/**
 	 * Criterion Instance for Internal Use
@@ -65,9 +85,123 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	private static AdvancementPacketReceiver packetReciever;
 	private static HashMap<String, NameKey> activeTabs = new HashMap<>();
 	
+	private AdvancementManager fileAdvancementManager;
+	
 	@Override
 	public void onLoad() {
 		instance = this;
+		fileAdvancementManager = new AdvancementManager(new NameKey("crazy_advancements", "file"));
+		fileAdvancementManager.makeAccessible();
+		loadFileAdvancements();
+	}
+	
+	private void loadFileAdvancements() {
+		File location = new File(getDataFolder().getAbsolutePath() + File.separator + "advancements" + File.separator);
+		
+		HashMap<NameKey, SerializedAdvancement> advancements = new HashMap<NameKey, SerializedAdvancement>();
+		
+		location.mkdirs();
+		File[] files = location.listFiles();
+		for(File file : files) {
+			if(file.isDirectory()) {
+				String namespace = location.getName();
+				advancements.putAll(loadNamespace(namespace, "", file));
+			}
+		}
+		
+		List<NameKey> missingAdvancements = new ArrayList<>(advancements.keySet());
+		HashMap<NameKey, Advancement> createdAdvancements = new HashMap<NameKey, Advancement>();
+		
+		while(missingAdvancements.size() > 0) {
+			Iterator<NameKey> missingIterator = missingAdvancements.iterator();
+			int processedAdvancements = 0;
+			
+			while(missingIterator.hasNext()) {
+				NameKey name = missingIterator.next();
+				SerializedAdvancement serializedAdvancement = advancements.get(name);
+				NameKey parent = serializedAdvancement.getParent();
+				
+				if(parent == null || createdAdvancements.containsKey(parent)) {
+					SerializedAdvancementDisplay serializedAdvancementDisplay = serializedAdvancement.getDisplay();
+					
+					//Generate Display
+					Material icon = Material.matchMaterial(serializedAdvancementDisplay.getIcon());
+					JSONMessage title = new JSONMessage(serializedAdvancementDisplay.getTitle().deserialize());
+					JSONMessage description = new JSONMessage(serializedAdvancementDisplay.getDescription().deserialize());
+					AdvancementFrame frame = AdvancementFrame.parse(serializedAdvancementDisplay.getFrame());
+					AdvancementVisibility visibility = AdvancementVisibility.parseVisibility(serializedAdvancementDisplay.getVisibility());
+					
+					AdvancementDisplay display = new AdvancementDisplay(icon, title, description, frame, visibility);
+					
+					if(serializedAdvancementDisplay.getBackgroundTexture() != null) {
+						display.setBackgroundTexture(serializedAdvancementDisplay.getBackgroundTexture());
+					}
+					
+					display.setX(serializedAdvancementDisplay.getX());
+					display.setY(serializedAdvancementDisplay.getY());
+					
+					//Generate Advancement
+					List<AdvancementFlag> flags = new ArrayList<>();
+					for(String flagName : serializedAdvancement.getFlags()) {
+						flags.add(AdvancementFlag.valueOf(flagName.toUpperCase(Locale.ROOT)));
+					}
+					
+					Advancement advancement = new Advancement(parent == null ? null : createdAdvancements.get(parent), name, display, flags.toArray(AdvancementFlag[]::new));
+					advancement.setCriteria(serializedAdvancement.getCriteria().deserialize());
+					advancement.setReward(serializedAdvancement.getReward());
+					
+					//Register
+					fileAdvancementManager.addAdvancement(advancement);
+					missingIterator.remove();
+					createdAdvancements.put(name, advancement);
+					processedAdvancements++;
+				}
+			}
+			
+			//Abort adding Advancements if no advancements were able to be processed
+			if(processedAdvancements == 0) {
+				for(NameKey name : missingAdvancements) {
+					System.err.println("Unable to load Advancement " + name + ": Parent does not exist");
+				}
+				break;
+			}
+		}
+	}
+	
+	private HashMap<NameKey, SerializedAdvancement> loadNamespace(String namespace, String path, File location) {
+		File[] files = location.listFiles();
+		
+		HashMap<NameKey, SerializedAdvancement> advancements = new HashMap<NameKey, SerializedAdvancement>();
+		
+		for(File file : files) {
+			if(file.isDirectory()) {
+				advancements.putAll(loadNamespace(namespace, file.getName() + "/", file));
+			} else if(file.isFile() && file.getName().endsWith(".json")) {
+				FileReader os = null;
+				try {
+					os = new FileReader(file);
+					
+					JsonElement element = JsonParser.parseReader(os);
+					os.close();
+					
+					SerializedAdvancement advancement = gson.fromJson(element, SerializedAdvancement.class);
+					
+					String fileName = file.getName();
+					String key = fileName.substring(0, fileName.length() - 5);//Remove .json
+					advancements.put(new NameKey(namespace, path + key), advancement);
+				} catch (Exception e) {
+					if(os != null) {
+						try {
+							os.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+					System.err.println("Unable to load Advancement from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
+				}
+			}
+		}
+		return advancements;
 	}
 	
 	@Override
@@ -77,6 +211,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			packetReciever.initPlayer(player);
+			fileAdvancementManager.addPlayer(player);
 		}
 		
 		//Register Events
@@ -100,10 +235,28 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		return instance;
 	}
 	
+	/**
+	 * Gets the Gson Instance
+	 * 
+	 * @return The Gson Instance
+	 */
+	public static Gson getGson() {
+		return gson;
+	}
+	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		packetReciever.initPlayer(player);
+		
+		//Add Player to File Advancement Manager
+		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				fileAdvancementManager.addPlayer(player);
+			}
+		}, 2);
 	}
 	
 	@EventHandler
@@ -198,6 +351,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 							sender.sendMessage(args[0].startsWith("@") ? "§cNo Player found for Selector §e" + args[0] + "§c" : "§cCan't find Player '§e" + args[0] + "§c'");
 						}
 					} catch(Exception ex) {
+						ex.printStackTrace();
 						sender.sendMessage(commandIncompatible);
 					}
 					
@@ -297,6 +451,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 						}
 						
 					} catch(Exception ex) {
+						ex.printStackTrace();
 						sender.sendMessage(commandIncompatible);
 					}
 					
@@ -353,6 +508,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 						}
 						
 					} catch(Exception ex) {
+						ex.printStackTrace();
 						sender.sendMessage(commandIncompatible);
 					}
 					
