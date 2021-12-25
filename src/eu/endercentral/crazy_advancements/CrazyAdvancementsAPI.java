@@ -104,7 +104,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		File[] files = location.listFiles();
 		for(File file : files) {
 			if(file.isDirectory()) {
-				String namespace = location.getName();
+				String namespace = file.getName();
 				advancements.putAll(loadNamespace(namespace, "", file));
 			}
 		}
