@@ -147,7 +147,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					}
 					
 					Advancement advancement = new Advancement(parent == null ? null : createdAdvancements.get(parent), name, display, flags.toArray(AdvancementFlag[]::new));
-					advancement.setCriteria(serializedAdvancement.getCriteria().deserialize());
+					if(serializedAdvancement.getCriteria() != null) {
+						advancement.setCriteria(serializedAdvancement.getCriteria().deserialize());
+					}
 					advancement.setReward(serializedAdvancement.getReward());
 					
 					//Register
