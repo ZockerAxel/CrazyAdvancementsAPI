@@ -1,5 +1,7 @@
 package eu.endercentral.crazy_advancements;
 
+import java.util.Objects;
+
 import net.minecraft.resources.MinecraftKey;
 
 /**
@@ -98,6 +100,11 @@ public class NameKey {
 	@Override
 	public String toString() {
 		return namespace + ":" + key;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(namespace, key);
 	}
 	
 }
