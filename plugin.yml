@@ -1,6 +1,6 @@
 main: eu.endercentral.crazy_advancements.CrazyAdvancementsAPI
 name: CrazyAdvancementsAPI
-version: 2.1.1
+version: 2.1.2
 api-version: 1.13
 load: startup
 author: ZockerAxel
