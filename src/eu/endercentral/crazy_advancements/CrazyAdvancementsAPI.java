@@ -420,7 +420,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 													}
 													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " §afor '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
 												} else {
-													sender.sendMessage("§cCriteria " + criteriaString + " §afor '§e" + advancement.getName() + "§a' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
+													sender.sendMessage("§cCriteria " + criteriaString + " §afor '§e" + advancement.getName() + "§c' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
 												}
 												
 											} else {
@@ -442,7 +442,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 													}
 													sender.sendMessage("§aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement '§e" + advancement.getName() + "§a' " + (grant ? "to" : "from") + " §b" + player.getName());
 												} else {
-													sender.sendMessage("§cAdvancement '§e" + advancement.getName() + "§a' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
+													sender.sendMessage("§cAdvancement '§e" + advancement.getName() + "§c' " + (grant ? "is already granted to" : "is already not granted to") + " §b" + player.getName());
 												}
 											}
 											
