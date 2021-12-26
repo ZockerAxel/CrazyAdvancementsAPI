@@ -482,7 +482,7 @@ public final class AdvancementManager {
 	 */
 	public GenericResult revokeAdvancement(Player player, Advancement advancement) {
 		AdvancementProgress progress = advancement.getProgress(player);
-		GenericResult result = progress.grant();
+		GenericResult result = progress.revoke();
 		
 		if(result == GenericResult.CHANGED) {
 			updateProgress(player, advancement);
@@ -502,7 +502,7 @@ public final class AdvancementManager {
 			return revokeAdvancement(Bukkit.getPlayer(uuid), advancement);
 		} else {
 			AdvancementProgress progress = advancement.getProgress(uuid);
-			GenericResult result = progress.grant();
+			GenericResult result = progress.revoke();
 			return result;
 		}
 	}
@@ -830,7 +830,6 @@ public final class AdvancementManager {
 		}
 	}
 	
-
 	/**
 	 * Unloads progress for Advancements in this Manager
 	 * 
