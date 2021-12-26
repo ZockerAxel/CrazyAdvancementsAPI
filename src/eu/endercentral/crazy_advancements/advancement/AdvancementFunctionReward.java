@@ -1,9 +1,6 @@
 package eu.endercentral.crazy_advancements.advancement;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.command.ProxiedNativeCommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.command.VanillaCommandWrapper;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,21 +45,8 @@ public class AdvancementFunctionReward extends AdvancementReward {
 	
 	@Override
 	public final void onGrant(Player player) {
-		OpSender sender = new OpSender(player);
-		String command = (delay > 0 ? "schedule function " + getName() + " " + getDelay() + " append" : "function " + getName());
-		Bukkit.dispatchCommand(sender, command);
-	}
-	
-	
-	private static class OpSender extends ProxiedNativeCommandSender {
-
-		private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
-		
-		public OpSender(Player callee) {
-			super(VanillaCommandWrapper.getListener(CONSOLE), CONSOLE, callee);
-		}
-		
-		
+		String command = "execute as " + player.getName() + " at @s run " + (delay > 0 ? "schedule function " + getName() + " " + getDelay() + " append" : "function " + getName());
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 	}
 	
 }
