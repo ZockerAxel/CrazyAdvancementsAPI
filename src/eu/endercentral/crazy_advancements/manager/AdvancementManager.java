@@ -753,7 +753,12 @@ public final class AdvancementManager {
 			if(!file.exists()) {
 				file.createNewFile();
 			} else if(!file.isFile()) {
-				throw new RuntimeException("Could not create Save File: A Folder with the File Name already exists: " + file.getName());
+				if(file.listFiles().length > 0) {
+					throw new RuntimeException("Could not create Save File: A Non-Empty Folder with the File Name already exists: " + file.getName());
+				} else {
+					file.delete();
+					file.createNewFile();
+				}
 			}
 			FileWriter w = new FileWriter(file);
 			w.write(saveFile.toJson());
