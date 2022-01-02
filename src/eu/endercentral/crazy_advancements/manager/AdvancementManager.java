@@ -750,8 +750,10 @@ public final class AdvancementManager {
 		saveFile.merge(newSaveFile);//Merge new Save Data onto existing Data so nothing gets lost
 		
 		try {
-			if(!file.exists() || !file.isFile()) {
+			if(!file.exists()) {
 				file.createNewFile();
+			} else if(!file.isFile()) {
+				throw new RuntimeException("Could not create Save File: A Folder with the File Name already exists: " + file.getName());
 			}
 			FileWriter w = new FileWriter(file);
 			w.write(saveFile.toJson());
