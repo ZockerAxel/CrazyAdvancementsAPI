@@ -318,7 +318,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		return activeTabs.get(player.getUniqueId().toString());
 	}
 	
-	private final String noPermission = "§cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is in error.";
+	private final String noPermission = "§cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is an error.";
 	private final String commandIncompatible = "§cThis Command is incompatible with your Arguments!";
 	
 	@Override
