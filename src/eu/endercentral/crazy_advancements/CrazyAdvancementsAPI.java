@@ -266,6 +266,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	@EventHandler
 	public void quit(PlayerQuitEvent e) {
 		packetReciever.close(e.getPlayer(), packetReciever.getHandlers().get(e.getPlayer().getName()));
+		
+		//Unload Progress in the File Advancement Manager
+		fileAdvancementManager.unloadProgress(e.getPlayer().getUniqueId());
 	}
 	
 	/**
