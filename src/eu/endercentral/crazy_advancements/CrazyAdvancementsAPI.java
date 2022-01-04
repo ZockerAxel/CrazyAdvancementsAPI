@@ -142,8 +142,10 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					
 					//Generate Advancement
 					List<AdvancementFlag> flags = new ArrayList<>();
-					for(String flagName : serializedAdvancement.getFlags()) {
-						flags.add(AdvancementFlag.valueOf(flagName.toUpperCase(Locale.ROOT)));
+					if(serializedAdvancement.getFlags() != null) {
+						for(String flagName : serializedAdvancement.getFlags()) {
+							flags.add(AdvancementFlag.valueOf(flagName.toUpperCase(Locale.ROOT)));
+						}
 					}
 					
 					Advancement advancement = new Advancement(parent == null ? null : createdAdvancements.get(parent), name, display, flags.toArray(AdvancementFlag[]::new));
