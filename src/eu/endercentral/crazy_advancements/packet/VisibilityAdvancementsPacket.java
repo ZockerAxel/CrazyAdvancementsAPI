@@ -1,6 +1,6 @@
 package eu.endercentral.crazy_advancements.packet;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -18,19 +18,20 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 public class VisibilityAdvancementsPacket extends AdvancementsPacket {
 	
 	private static List<Advancement> stripInvisibleAdvancements(Player player, List<Advancement> advancements) {
-		List<Advancement> strippedList = new ArrayList<>();
+		Iterator<Advancement> advancementsIterator = advancements.iterator();
 		
-		for(Advancement advancement: advancements) {
+		while(advancementsIterator.hasNext()) {
+			Advancement advancement = advancementsIterator.next();
 			AdvancementDisplay display = advancement.getDisplay();
 			
 			boolean visible = display.isVisible(player, advancement);
 			advancement.saveVisibilityStatus(player, visible);
-			if(visible) {
-			    strippedList.add(advancement);
+			if(!visible) {
+				advancementsIterator.remove();
 			}
 		}
 		
-		return strippedList;
+		return advancements;
 	}
 	
 	/**
