@@ -9,6 +9,12 @@ import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 
+/**
+ * Represents an Advancement Packet which respects Advancement Visibility
+ * 
+ * @author Axel
+ *
+ */
 public class VisibilityAdvancementsPacket extends AdvancementsPacket {
 	
 	private static List<Advancement> stripInvisibleAdvancements(Player player, List<Advancement> advancements) {
@@ -38,6 +44,5 @@ public class VisibilityAdvancementsPacket extends AdvancementsPacket {
 	public VisibilityAdvancementsPacket(Player player, boolean reset, List<Advancement> advancements, List<NameKey> removedAdvancements) {
 		super(player, reset, stripInvisibleAdvancements(player, advancements), removedAdvancements);
 	}
-	
 	
 }
