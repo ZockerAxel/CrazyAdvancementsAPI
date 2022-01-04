@@ -26,7 +26,7 @@ public class VisibilityAdvancementsPacket extends AdvancementsPacket {
 			boolean visible = display.isVisible(player, advancement);
 			advancement.saveVisibilityStatus(player, visible);
 			if(visible) {
-			    advancements.add(advancement);
+			    strippedList.add(advancement);
 			}
 		}
 		
