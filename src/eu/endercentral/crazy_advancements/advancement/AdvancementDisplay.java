@@ -222,6 +222,21 @@ public class AdvancementDisplay {
 			return TASK;
 		}
 		
+		/**
+		 * Parses the AdvancementFrame by it's name
+		 * 
+		 * @param name The case-insensitive name
+		 * @return The AdvancementFrame or null if no matching Frame is found
+		 */
+		public static AdvancementFrame parseStrict(String name) {
+			for(AdvancementFrame frame : values()) {
+				if(frame.name().equalsIgnoreCase(name)) {
+					return frame;
+				}
+			}
+			return null;
+		}
+		
 	}
 	
 	/**

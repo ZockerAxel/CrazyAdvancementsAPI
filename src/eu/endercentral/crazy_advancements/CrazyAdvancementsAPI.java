@@ -340,15 +340,22 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 							Material mat = getMaterial(args[1]);
 							
 							if(mat != null && mat.isItem()) {
-								String message = args[2];
-								if(args.length > 3) {
-									for(int i = 3; i < args.length; i++) {
+								int messageStartIndex = 2;
+								AdvancementFrame frame = AdvancementFrame.parseStrict(args[2]);
+								if(frame == null) {
+									frame = AdvancementFrame.TASK;
+								} else {
+									messageStartIndex = 3;
+								}
+								String message = args[messageStartIndex];
+								if(args.length > messageStartIndex + 1) {
+									for(int i = messageStartIndex + 1; i < args.length; i++) {
 										message += " " + args[i];
 									}
 								}
 								
 								for(Player player : players) {
-									ToastNotification toast = new ToastNotification(mat, message, AdvancementFrame.TASK);
+									ToastNotification toast = new ToastNotification(mat, message, frame);
 									toast.send(player);
 								}
 								
@@ -563,6 +570,12 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 				for(Material mat : Material.values()) {
 					if(mat.isItem() && mat.name().toLowerCase().startsWith(args[1].toLowerCase())) {
 						tab.add(mat.name().toLowerCase());
+					}
+				}
+			} else if(args.length == 3) {
+				for(AdvancementFrame frame : AdvancementFrame.values()) {
+					if(frame.name().toLowerCase().startsWith(args[2].toLowerCase())) {
+						tab.add(frame.name().toLowerCase());
 					}
 				}
 			}

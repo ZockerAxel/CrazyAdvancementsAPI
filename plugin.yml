@@ -18,6 +18,6 @@ commands:
     description: Sets <Advancement> Progress for <Player> in <Manager>
     aliases: [caprogress]
   showtoast:
-    usage: /showtoast <Player> <Icon> <Message>
+    usage: /showtoast <Player> <Icon> [Frame] <Message>
     description: Displays a Toast Advancement Message
     aliases: [catoast, toast]
