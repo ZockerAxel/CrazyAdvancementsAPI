@@ -18,8 +18,8 @@ public class SaveFile {
 	
 	private static final Gson gson = new Gson();
 	
-	private final Map<String, ProgressData> progressData;
-	private final Map<String, CriteriaData> criteriaData;
+	private Map<String, ProgressData> progressData;
+	private Map<String, CriteriaData> criteriaData;
 	
 	/**
 	 * Constructor for creating a Save File
@@ -45,6 +45,7 @@ public class SaveFile {
 	 * @return The list containing {@link ProgressData}
 	 */
 	public Collection<ProgressData> getProgressData() {
+		if(progressData == null) progressData = new HashMap<>();
 		return progressData.values();
 	}
 	
@@ -54,6 +55,7 @@ public class SaveFile {
 	 * @return The list containing {@link CriteriaData}
 	 */
 	public Collection<CriteriaData> getCriteriaData() {
+		if(criteriaData == null) criteriaData = new HashMap<>();
 		return criteriaData.values();
 	}
 	
