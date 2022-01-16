@@ -4,17 +4,20 @@ import java.util.HashMap;
 
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 
+import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
+import eu.endercentral.crazy_advancements.advancement.ToastNotification;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.ItemStack;
 
 public class PacketConverter {
 	
-	private static AdvancementRewards advancementRewards = new AdvancementRewards(0, new MinecraftKey[0], new MinecraftKey[0], null);
+	private static final AdvancementRewards advancementRewards = new AdvancementRewards(0, new MinecraftKey[0], new MinecraftKey[0], null);
 	
 	private static HashMap<NameKey, Float> smallestX = new HashMap<>();
 	private static HashMap<NameKey, Float> smallestY = new HashMap<>();
@@ -76,29 +79,17 @@ public class PacketConverter {
 	/**
 	 * Creates an NMS Toast Advancement
 	 * 
-	 * @param advancement The Advancement to use as a base
+	 * @param notification The Toast Notification to use as a base
 	 * @return The NMS Advancement
 	 */
-	public static net.minecraft.advancements.Advancement toNmsToastAdvancement(Advancement advancement) {
-		AdvancementDisplay display = advancement.getDisplay();
-		
-		ItemStack icon = CraftItemStack.asNMSCopy(display.getIcon());
+	public static net.minecraft.advancements.Advancement toNmsToastAdvancement(ToastNotification notification) {
+		ItemStack icon = CraftItemStack.asNMSCopy(notification.getIcon());
 		
 		MinecraftKey backgroundTexture = null;
-		boolean hasBackgroundTexture = display.getBackgroundTexture() != null;
 		
-		if(hasBackgroundTexture) {
-			backgroundTexture = new MinecraftKey(display.getBackgroundTexture());
-		}
+		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(icon, notification.getMessage().getBaseComponent(), new JSONMessage(new TextComponent("Toast Notification")).getBaseComponent(), backgroundTexture, notification.getFrame().getNMS(), true, false, true);
 		
-		float x = generateX(advancement.getTab(), display.generateX());
-		float y = generateY(advancement.getTab(), display.generateY());
-		
-		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), true, false, advancement.hasFlag(AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN));
-		advDisplay.a(x, y);
-		
-		net.minecraft.advancements.Advancement parent = advancement.getParent() == null ? null : createDummy(advancement.getParent().getName());
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), parent, advDisplay, advancementRewards, advancement.getCriteria().getCriteria(), advancement.getCriteria().getRequirements());
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), null, advDisplay, advancementRewards, ToastNotification.NOTIFICATION_CRITERIA.getCriteria(), ToastNotification.NOTIFICATION_CRITERIA.getRequirements());
 		
 		return adv;
 	}

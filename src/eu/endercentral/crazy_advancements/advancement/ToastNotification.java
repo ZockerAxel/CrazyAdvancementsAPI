@@ -1,15 +1,16 @@
 package eu.endercentral.crazy_advancements.advancement;
 
-import java.util.Arrays;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import eu.endercentral.crazy_advancements.CrazyAdvancementsAPI;
 import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay.AdvancementFrame;
-import eu.endercentral.crazy_advancements.packet.ToastAdvancementsPacket;
+import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
+import eu.endercentral.crazy_advancements.advancement.progress.AdvancementProgress;
+import eu.endercentral.crazy_advancements.packet.ToastPacket;
 import net.md_5.bungee.api.chat.TextComponent;
 
 /**
@@ -20,10 +21,14 @@ import net.md_5.bungee.api.chat.TextComponent;
  */
 public class ToastNotification {
 	
+	public static final NameKey NOTIFICATION_NAME = new NameKey(CrazyAdvancementsAPI.API_NAMESPACE, "notification");
+	public static final Criteria NOTIFICATION_CRITERIA = new Criteria(1);
+	public static final AdvancementProgress NOTIFICATION_PROGRESS = new AdvancementProgress(NOTIFICATION_CRITERIA.getCriteria(), NOTIFICATION_CRITERIA.getRequirements());
+	
+	
 	private final ItemStack icon;
 	private final JSONMessage message;
 	private final AdvancementFrame frame;
-	private final Advancement toastAdvancement;
 	
 	/**
 	 * Constructor for creating Toast Notifications
@@ -36,9 +41,6 @@ public class ToastNotification {
 		this.icon = icon;
 		this.message = message;
 		this.frame = frame;
-		
-		AdvancementDisplay toastAdvancementDisplay = new AdvancementDisplay(icon, this.message, new JSONMessage(new TextComponent("Toast Notification")), frame, AdvancementVisibility.ALWAYS);
-		this.toastAdvancement = new Advancement(new NameKey("eu.endercentral", "notification"), toastAdvancementDisplay, AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN);
 	}
 	
 	/**
@@ -52,9 +54,6 @@ public class ToastNotification {
 		this.icon = icon;
 		this.message = new JSONMessage(new TextComponent(message));
 		this.frame = frame;
-		
-		AdvancementDisplay toastAdvancementDisplay = new AdvancementDisplay(icon, this.message, new JSONMessage(new TextComponent("Toast Notification")), frame, AdvancementVisibility.ALWAYS);
-		this.toastAdvancement = new Advancement(new NameKey("eu.endercentral", "notification"), toastAdvancementDisplay, AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN);
 	}
 	
 	/**
@@ -68,9 +67,6 @@ public class ToastNotification {
 		this.icon = new ItemStack(icon);
 		this.message = message;
 		this.frame = frame;
-		
-		AdvancementDisplay toastAdvancementDisplay = new AdvancementDisplay(icon, this.message, new JSONMessage(new TextComponent("Toast Notification")), frame, AdvancementVisibility.ALWAYS);
-		this.toastAdvancement = new Advancement(new NameKey("eu.endercentral", "notification"), toastAdvancementDisplay, AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN);
 	}
 	
 	/**
@@ -84,9 +80,6 @@ public class ToastNotification {
 		this.icon = new ItemStack(icon);
 		this.message = new JSONMessage(new TextComponent(message));
 		this.frame = frame;
-		
-		AdvancementDisplay toastAdvancementDisplay = new AdvancementDisplay(icon, this.message, new JSONMessage(new TextComponent("Toast Notification")), frame, AdvancementVisibility.ALWAYS);
-		this.toastAdvancement = new Advancement(new NameKey("eu.endercentral", "notification"), toastAdvancementDisplay, AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN);
 	}
 	
 	/**
@@ -122,9 +115,8 @@ public class ToastNotification {
 	 * @param player The target Player
 	 */
 	public void send(Player player) {
-		toastAdvancement.getProgress(player).grant();
-		ToastAdvancementsPacket addPacket = new ToastAdvancementsPacket(player, false, Arrays.asList(toastAdvancement), null);
-		ToastAdvancementsPacket removePacket = new ToastAdvancementsPacket(player, false, null, Arrays.asList(toastAdvancement.getName()));
+		ToastPacket addPacket = new ToastPacket(player, true, this);
+		ToastPacket removePacket = new ToastPacket(player, false, this);
 		
 		addPacket.send();
 		removePacket.send();

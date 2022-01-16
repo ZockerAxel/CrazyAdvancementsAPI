@@ -59,6 +59,8 @@ import net.minecraft.resources.MinecraftKey;
  */
 public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	
+	public static final String API_NAMESPACE = "crazy_advancements";
+	
 	private static final Gson gson;
 	private static final List<String> SELECTORS = Arrays.asList("@a", "@p", "@s", "@r");
 	private static CrazyAdvancementsAPI instance;
@@ -90,7 +92,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	@Override
 	public void onLoad() {
 		instance = this;
-		fileAdvancementManager = new AdvancementManager(new NameKey("crazy_advancements", "file"));
+		fileAdvancementManager = new AdvancementManager(new NameKey(API_NAMESPACE, "file"));
 		fileAdvancementManager.makeAccessible();
 		loadFileAdvancements();
 	}
