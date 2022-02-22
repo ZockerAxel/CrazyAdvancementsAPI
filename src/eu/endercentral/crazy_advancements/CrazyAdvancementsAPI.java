@@ -686,11 +686,11 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		String materialName = colonIndex == -1 ? input : input.substring(0, colonIndex);
 		String data = colonIndex == -1 ? "" : input.substring(colonIndex + 1);
 		Material material = getMaterial(materialName);
-		ItemStack stack = new ItemStack(material);
 		
 		if(material == null || !material.isItem()) {
 			return null;
 		}
+		ItemStack stack = new ItemStack(material);
 		
 		switch(material) {
 		case PLAYER_HEAD:
