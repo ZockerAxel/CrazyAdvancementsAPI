@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
@@ -23,6 +24,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.gson.FieldNamingPolicy;
@@ -127,7 +130,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					SerializedAdvancementDisplay serializedAdvancementDisplay = serializedAdvancement.getDisplay();
 					
 					//Generate Display
-					Material icon = Material.matchMaterial(serializedAdvancementDisplay.getIcon());
+					ItemStack icon = getItemStack(serializedAdvancementDisplay.getIcon());
 					JSONMessage title = new JSONMessage(serializedAdvancementDisplay.getTitle().deserialize());
 					JSONMessage description = new JSONMessage(serializedAdvancementDisplay.getDescription().deserialize());
 					AdvancementFrame frame = AdvancementFrame.parse(serializedAdvancementDisplay.getFrame());
@@ -339,9 +342,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 						}
 						
 						if(players.size() > 0) {
-							Material mat = getMaterial(args[1]);
+							ItemStack stack = getItemStack(args[1], sender);
 							
-							if(mat != null && mat.isItem()) {
+							if(stack != null) {
 								int messageStartIndex = 2;
 								AdvancementFrame frame = AdvancementFrame.parseStrict(args[2]);
 								if(frame == null) {
@@ -357,7 +360,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 								}
 								
 								for(Player player : players) {
-									ToastNotification toast = new ToastNotification(mat, message, frame);
+									ToastNotification toast = new ToastNotification(stack, message, frame);
 									toast.send(player);
 								}
 								
@@ -675,7 +678,51 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 				return mat;
 			}
 		}
-		return null;
+		return Material.matchMaterial(input);
+	}
+	
+	private ItemStack getItemStack(String input, CommandSender... commandSender) {
+		int colonIndex = input.indexOf(':');
+		String materialName = colonIndex == -1 ? input : input.substring(0, colonIndex);
+		String data = colonIndex == -1 ? "" : input.substring(colonIndex + 1);
+		Material material = getMaterial(materialName);
+		ItemStack stack = new ItemStack(material);
+		
+		if(material == null || !material.isItem()) {
+			return null;
+		}
+		
+		switch(material) {
+		case PLAYER_HEAD:
+			if(!data.isEmpty()) {
+				if(commandSender.length > 0) {
+					for(String selector : SELECTORS) {
+						if(data.startsWith(selector)) {
+							List<Player> players = new ArrayList<>();
+							for(Entity entity : Bukkit.selectEntities(commandSender[0], data)) {
+								if(entity instanceof Player) {
+									players.add((Player) entity);
+								}
+							}
+							
+							if(players.size() > 0) {
+								Player player = players.get(0);
+								SkullMeta meta = (SkullMeta) stack.getItemMeta();
+								meta.setOwningPlayer(player);
+								stack.setItemMeta(meta);
+							}
+							return stack;
+						}
+					}
+				}
+				OfflinePlayer player = Bukkit.getOfflinePlayer(data);
+				SkullMeta meta = (SkullMeta) stack.getItemMeta();
+				meta.setOwningPlayer(player);
+				stack.setItemMeta(meta);
+			}
+		default:
+			return stack;
+		}
 	}
 	
 }
