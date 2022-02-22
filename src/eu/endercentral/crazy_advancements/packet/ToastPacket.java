@@ -81,6 +81,7 @@ public class ToastPacket {
 		//Populate Lists
 		if(add) {
 			advancements.add(PacketConverter.toNmsToastAdvancement(getNotification()));
+			progress.put(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), ToastNotification.NOTIFICATION_PROGRESS.getNmsProgress());
 		} else {
 			removedAdvancements.add(ToastNotification.NOTIFICATION_NAME.getMinecraftKey());
 		}

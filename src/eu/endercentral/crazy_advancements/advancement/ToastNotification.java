@@ -25,6 +25,9 @@ public class ToastNotification {
 	public static final Criteria NOTIFICATION_CRITERIA = new Criteria(1);
 	public static final AdvancementProgress NOTIFICATION_PROGRESS = new AdvancementProgress(NOTIFICATION_CRITERIA.getCriteria(), NOTIFICATION_CRITERIA.getRequirements());
 	
+	static {
+		NOTIFICATION_PROGRESS.setCriteriaProgress(1);
+	}
 	
 	private final ItemStack icon;
 	private final JSONMessage message;
