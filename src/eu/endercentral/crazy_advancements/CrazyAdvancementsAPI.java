@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,6 +47,8 @@ import eu.endercentral.crazy_advancements.advancement.progress.GenericResult;
 import eu.endercentral.crazy_advancements.advancement.progress.GrantCriteriaResult;
 import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancement;
 import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancementDisplay;
+import eu.endercentral.crazy_advancements.item.CustomItem;
+import eu.endercentral.crazy_advancements.item.SerializedCustomItem;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import eu.endercentral.crazy_advancements.packet.AdvancementsPacket;
 import net.minecraft.advancements.Criterion;
@@ -90,14 +93,69 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	private static AdvancementPacketReceiver packetReciever;
 	private static HashMap<String, NameKey> activeTabs = new HashMap<>();
 	
+	private final List<CustomItem> customItems = new ArrayList<>();
 	private AdvancementManager fileAdvancementManager;
 	
 	@Override
 	public void onLoad() {
 		instance = this;
+		loadCustomItems();
 		fileAdvancementManager = new AdvancementManager(new NameKey(API_NAMESPACE, "file"));
 		fileAdvancementManager.makeAccessible();
 		loadFileAdvancements();
+	}
+	
+	private void loadCustomItems() {
+		File location = new File(getDataFolder().getAbsolutePath() + File.separator + "custom_items" + File.separator);
+		
+		customItems.clear();
+		
+		location.mkdirs();
+		File[] files = location.listFiles();
+		for(File file : files) {
+			if(file.isDirectory()) {
+				String namespace = file.getName();
+				customItems.addAll(loadCustomItemsFromNamespace(namespace, "", file));
+			}
+		}
+		
+		System.out.println("Loaded " + customItems.size() + " Custom Items");
+	}
+	
+	private List<CustomItem> loadCustomItemsFromNamespace(String namespace, String path, File location) {
+		File[] files = location.listFiles();
+		
+		List<CustomItem> items = new ArrayList<>();
+		
+		for(File file : files) {
+			if(file.isDirectory()) {
+				items.addAll(loadCustomItemsFromNamespace(namespace, path + file.getName() + "/", file));
+			} else if(file.isFile() && file.getName().endsWith(".json")) {
+				FileReader os = null;
+				try {
+					os = new FileReader(file);
+					
+					JsonElement element = JsonParser.parseReader(os);
+					os.close();
+					
+					SerializedCustomItem item = gson.fromJson(element, SerializedCustomItem.class);
+					
+					String fileName = file.getName();
+					String key = fileName.substring(0, fileName.length() - 5);//Remove .json
+					items.add(item.deserialize(new NameKey(namespace, path + key)));
+				} catch (Exception e) {
+					if(os != null) {
+						try {
+							os.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+					System.err.println("Unable to load Custom Item from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
+				}
+			}
+		}
+		return items;
 	}
 	
 	private void loadFileAdvancements() {
@@ -110,7 +168,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		for(File file : files) {
 			if(file.isDirectory()) {
 				String namespace = file.getName();
-				advancements.putAll(loadNamespace(namespace, "", file));
+				advancements.putAll(loadAdvancementsFromNamespace(namespace, "", file));
 			}
 		}
 		
@@ -177,14 +235,14 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		}
 	}
 	
-	private HashMap<NameKey, SerializedAdvancement> loadNamespace(String namespace, String path, File location) {
+	private HashMap<NameKey, SerializedAdvancement> loadAdvancementsFromNamespace(String namespace, String path, File location) {
 		File[] files = location.listFiles();
 		
 		HashMap<NameKey, SerializedAdvancement> advancements = new HashMap<NameKey, SerializedAdvancement>();
 		
 		for(File file : files) {
 			if(file.isDirectory()) {
-				advancements.putAll(loadNamespace(namespace, path + file.getName() + "/", file));
+				advancements.putAll(loadAdvancementsFromNamespace(namespace, path + file.getName() + "/", file));
 			} else if(file.isFile() && file.getName().endsWith(".json")) {
 				FileReader os = null;
 				try {
@@ -577,6 +635,11 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 						tab.add(mat.name().toLowerCase());
 					}
 				}
+				for(CustomItem customItem : customItems) {
+					if(customItem.getName().toString().startsWith(args[1].toLowerCase())) {
+						tab.add(customItem.getName().toString());
+					}
+				}
 			} else if(args.length == 3) {
 				for(AdvancementFrame frame : AdvancementFrame.values()) {
 					if(frame.name().toLowerCase().startsWith(args[2].toLowerCase())) {
@@ -681,16 +744,38 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		return Material.matchMaterial(input);
 	}
 	
+	private CustomItem getCustomItem(String input) {
+		NameKey inputName = new NameKey(input);
+		for(CustomItem item : customItems) {
+			if(item.getName().isSimilar(inputName)) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 	private ItemStack getItemStack(String input, CommandSender... commandSender) {
 		int colonIndex = input.indexOf(':');
 		String materialName = colonIndex == -1 ? input : input.substring(0, colonIndex);
 		String data = colonIndex == -1 ? "" : input.substring(colonIndex + 1);
 		Material material = getMaterial(materialName);
 		
+		ItemStack stack;
+		
 		if(material == null || !material.isItem()) {
-			return null;
+			CustomItem customItem = getCustomItem(input);
+			if(customItem == null) {
+				return null;
+			} else {
+				material = customItem.getType();
+				stack = new ItemStack(material);
+				ItemMeta meta = stack.getItemMeta();
+				meta.setCustomModelData(customItem.getCustomModelData());
+				stack.setItemMeta(meta);
+			}
+		} else {
+			stack = new ItemStack(material);
 		}
-		ItemStack stack = new ItemStack(material);
 		
 		switch(material) {
 		case PLAYER_HEAD:
