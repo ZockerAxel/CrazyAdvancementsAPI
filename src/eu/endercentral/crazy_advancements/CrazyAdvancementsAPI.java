@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -806,6 +807,15 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 				stack.setItemMeta(meta);
 			}
 		default:
+			if(!data.isEmpty() && material.getMaxDurability() > 0) {
+				try {
+					short damage = Short.parseShort(data);
+					Damageable meta = (Damageable) stack.getItemMeta();
+					meta.setDamage(damage);
+					stack.setItemMeta(meta);
+				} catch (ClassCastException | NumberFormatException e) {
+				}
+			}
 			return stack;
 		}
 	}
