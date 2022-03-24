@@ -659,7 +659,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					sender.sendMessage("§aCustom Items have been reloaded");
 					break;
 				default:
-					sender.sendMessage("§cInvalid Reload Categor '" + args[0] +"'. Valid categories are all, advancements, items");
+					sender.sendMessage("§cInvalid Reload Category '" + args[0] +"'. Valid categories are all, advancements, items");
 					break;
 				}
 			} else {
