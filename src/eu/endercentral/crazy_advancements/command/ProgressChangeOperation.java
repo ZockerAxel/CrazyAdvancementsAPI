@@ -30,6 +30,13 @@ public enum ProgressChangeOperation {
 		}
 	},
 	
+	DIVIDE {
+		@Override
+		public int apply(int base, int amount) {
+			return (int) Math.floor(base * 1d / amount);
+		}
+	},
+	
 	POWER {
 		@Override
 		public int apply(int base, int amount) {
