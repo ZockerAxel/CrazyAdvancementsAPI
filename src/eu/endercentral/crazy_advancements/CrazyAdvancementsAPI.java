@@ -48,6 +48,7 @@ import eu.endercentral.crazy_advancements.advancement.progress.GenericResult;
 import eu.endercentral.crazy_advancements.advancement.progress.GrantCriteriaResult;
 import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancement;
 import eu.endercentral.crazy_advancements.advancement.serialized.SerializedAdvancementDisplay;
+import eu.endercentral.crazy_advancements.command.ProgressChangeOperation;
 import eu.endercentral.crazy_advancements.item.CustomItem;
 import eu.endercentral.crazy_advancements.item.SerializedCustomItem;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
@@ -598,15 +599,19 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 										
 										if(advancement != null) {
 											if(args.length >= 4) {
+												int number = Integer.parseInt(args[3]);
+												ProgressChangeOperation operation = args.length >= 5 ? ProgressChangeOperation.parse(args[4]) : ProgressChangeOperation.SET;
 												
-												int progress = Integer.parseInt(args[3]);
+												int currentProgress = advancement.getProgress(player).getCriteriaProgress();
+												int progress = operation.apply(currentProgress, number);
+												
 												manager.setCriteriaProgress(player, advancement, progress);
 												
 												if(fileAdvancementManager.equals(manager)) {
 													fileAdvancementManager.saveProgress(player, advancement);
 												}
 												
-												sender.sendMessage("§aSuccessfully set Criteria Progress to " + progress + " §afor Advancement '§e" + advancement.getName() + "§a' for Player §b" + player.getName());
+												sender.sendMessage("§aSuccessfully updated Criteria Progress §afor Advancement '§e" + advancement.getName() + "§a' for Player §b" + player.getName());
 											}
 											
 										} else {
@@ -780,6 +785,18 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 					if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
 						tab.add(args[3]);
 						tab.add("" + advancement.getCriteria().getRequiredNumber());
+					}
+				}
+			} else if(args.length == 5) {
+				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+				if(manager != null) {
+					Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
+					if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
+						for(ProgressChangeOperation operation : ProgressChangeOperation.values()) {
+							if(operation.name().toLowerCase().startsWith(args[4].toLowerCase())) {
+								tab.add(operation.name().toLowerCase());
+							}
+						}
 					}
 				}
 			}
