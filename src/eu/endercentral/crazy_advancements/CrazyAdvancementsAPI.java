@@ -646,7 +646,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		if(cmd.getName().equalsIgnoreCase("careload")) {
 			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.reload")) {
 				if(args.length > 0) {
-					switch(args[1].toLowerCase()) {
+					switch(args[0].toLowerCase()) {
 					case "all":
 						reload();
 						sender.sendMessage("§aCrazy Advancements API was reloaded");
