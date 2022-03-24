@@ -678,125 +678,129 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		ArrayList<String> tab = new ArrayList<>();
 		
 		if(cmd.getName().equalsIgnoreCase("showtoast")) {
-			if(args.length == 1) {
-				for(String selector : SELECTORS) {
-					if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(selector);
+			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.showtoast")) {
+				if(args.length == 1) {
+					for(String selector : SELECTORS) {
+						if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(selector);
+						}
 					}
-				}
-				for(Player player : Bukkit.getOnlinePlayers()) {
-					if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(player.getName());
+					for(Player player : Bukkit.getOnlinePlayers()) {
+						if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(player.getName());
+						}
 					}
-				}
-			} else if(args.length == 2) {
-				for(Material mat : Material.values()) {
-					if(mat.isItem() && mat.name().toLowerCase().startsWith(args[1].toLowerCase())) {
-						tab.add(mat.name().toLowerCase());
+				} else if(args.length == 2) {
+					for(Material mat : Material.values()) {
+						if(mat.isItem() && mat.name().toLowerCase().startsWith(args[1].toLowerCase())) {
+							tab.add(mat.name().toLowerCase());
+						}
 					}
-				}
-				for(CustomItem customItem : customItems) {
-					if(customItem.getName().toString().startsWith(args[1].toLowerCase())) {
-						tab.add(customItem.getName().toString());
+					for(CustomItem customItem : customItems) {
+						if(customItem.getName().toString().startsWith(args[1].toLowerCase())) {
+							tab.add(customItem.getName().toString());
+						}
 					}
-				}
-			} else if(args.length == 3) {
-				for(AdvancementFrame frame : AdvancementFrame.values()) {
-					if(frame.name().toLowerCase().startsWith(args[2].toLowerCase())) {
-						tab.add(frame.name().toLowerCase());
-					}
-				}
-			}
-			
-		}
-		
-		if(cmd.getName().equalsIgnoreCase("grant") || cmd.getName().equalsIgnoreCase("revoke")) {
-			if(args.length == 1) {
-				for(String selector : SELECTORS) {
-					if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(selector);
-					}
-				}
-				for(Player player : Bukkit.getOnlinePlayers()) {
-					if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(player.getName());
-					}
-				}
-			} else if(args.length == 2) {
-				for(AdvancementManager manager : AdvancementManager.getAccessibleManagers()) {
-					if(manager.getName().toString().startsWith(args[1].toLowerCase())) {
-						tab.add(manager.getName().toString());
-					}
-				}
-			} else if(args.length == 3) {
-				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
-				if(manager != null) {
-					for(Advancement advancement : manager.getAdvancements()) {
-						if(advancement.getName().toString().startsWith(args[2].toLowerCase()) || advancement.getName().getKey().startsWith(args[2].toLowerCase())) {
-							tab.add(advancement.getName().toString());
+				} else if(args.length == 3) {
+					for(AdvancementFrame frame : AdvancementFrame.values()) {
+						if(frame.name().toLowerCase().startsWith(args[2].toLowerCase())) {
+							tab.add(frame.name().toLowerCase());
 						}
 					}
 				}
-			} else if(args.length >= 4) {
-				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
-				if(manager != null) {
-					Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
-					if(advancement != null) {
-						for(String criterion : advancement.getCriteria().getActionNames()) {
-							if(criterion.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
-								tab.add(criterion);
+			}
+		}
+		
+		if(cmd.getName().equalsIgnoreCase("grant") || cmd.getName().equalsIgnoreCase("revoke")) {
+			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.grantrevoke")) {
+				if(args.length == 1) {
+					for(String selector : SELECTORS) {
+						if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(selector);
+						}
+					}
+					for(Player player : Bukkit.getOnlinePlayers()) {
+						if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(player.getName());
+						}
+					}
+				} else if(args.length == 2) {
+					for(AdvancementManager manager : AdvancementManager.getAccessibleManagers()) {
+						if(manager.getName().toString().startsWith(args[1].toLowerCase())) {
+							tab.add(manager.getName().toString());
+						}
+					}
+				} else if(args.length == 3) {
+					AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+					if(manager != null) {
+						for(Advancement advancement : manager.getAdvancements()) {
+							if(advancement.getName().toString().startsWith(args[2].toLowerCase()) || advancement.getName().getKey().startsWith(args[2].toLowerCase())) {
+								tab.add(advancement.getName().toString());
+							}
+						}
+					}
+				} else if(args.length >= 4) {
+					AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+					if(manager != null) {
+						Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
+						if(advancement != null) {
+							for(String criterion : advancement.getCriteria().getActionNames()) {
+								if(criterion.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
+									tab.add(criterion);
+								}
 							}
 						}
 					}
 				}
 			}
-			
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("setprogress")) {
-			if(args.length == 1) {
-				for(String selector : SELECTORS) {
-					if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(selector);
-					}
-				}
-				for(Player player : Bukkit.getOnlinePlayers()) {
-					if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
-						tab.add(player.getName());
-					}
-				}
-			} else if(args.length == 2) {
-				for(AdvancementManager manager : AdvancementManager.getAccessibleManagers()) {
-					if(manager.getName().toString().startsWith(args[1].toLowerCase())) {
-						tab.add(manager.getName().toString());
-					}
-				}
-			} else if(args.length == 3) {
-				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
-				if(manager != null) {
-					for(Advancement advancement : manager.getAdvancements()) {
-						if((advancement.getName().toString().startsWith(args[2].toLowerCase()) || advancement.getName().getKey().startsWith(args[2].toLowerCase()))  && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
-							tab.add(advancement.getName().toString());
+			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.grantrevoke")) {
+				if(args.length == 1) {
+					for(String selector : SELECTORS) {
+						if(selector.toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(selector);
 						}
 					}
-				}
-			} else if(args.length == 4) {
-				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
-				if(manager != null) {
-					Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
-					if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
-						tab.add(args[3]);
-						tab.add("" + advancement.getCriteria().getRequiredNumber());
+					for(Player player : Bukkit.getOnlinePlayers()) {
+						if(player.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
+							tab.add(player.getName());
+						}
 					}
-				}
-			} else if(args.length == 5) {
-				AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
-				if(manager != null) {
-					Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
-					if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
-						for(ProgressChangeOperation operation : ProgressChangeOperation.values()) {
-							if(operation.name().toLowerCase().startsWith(args[4].toLowerCase())) {
-								tab.add(operation.name().toLowerCase());
+				} else if(args.length == 2) {
+					for(AdvancementManager manager : AdvancementManager.getAccessibleManagers()) {
+						if(manager.getName().toString().startsWith(args[1].toLowerCase())) {
+							tab.add(manager.getName().toString());
+						}
+					}
+				} else if(args.length == 3) {
+					AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+					if(manager != null) {
+						for(Advancement advancement : manager.getAdvancements()) {
+							if((advancement.getName().toString().startsWith(args[2].toLowerCase()) || advancement.getName().getKey().startsWith(args[2].toLowerCase()))  && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
+								tab.add(advancement.getName().toString());
+							}
+						}
+					}
+				} else if(args.length == 4) {
+					AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+					if(manager != null) {
+						Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
+						if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
+							tab.add(args[3]);
+							tab.add("" + advancement.getCriteria().getRequiredNumber());
+						}
+					}
+				} else if(args.length == 5) {
+					AdvancementManager manager = AdvancementManager.getAccessibleManager(new NameKey(args[1]));
+					if(manager != null) {
+						Advancement advancement = manager.getAdvancement(new NameKey(args[2]));
+						if(advancement != null && advancement.getCriteria().getType() == CriteriaType.NUMBER) {
+							for(ProgressChangeOperation operation : ProgressChangeOperation.values()) {
+								if(operation.name().toLowerCase().startsWith(args[4].toLowerCase())) {
+									tab.add(operation.name().toLowerCase());
+								}
 							}
 						}
 					}
@@ -805,14 +809,16 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("careload")) {
-			if("all".startsWith(args[0])) {
-				tab.add("all");
-			}
-			if("advancements".startsWith(args[0])) {
-				tab.add("advancements");
-			}
-			if("items".startsWith(args[0])) {
-				tab.add("items");
+			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.reload")) {
+				if("all".startsWith(args[0])) {
+					tab.add("all");
+				}
+				if("advancements".startsWith(args[0])) {
+					tab.add("advancements");
+				}
+				if("items".startsWith(args[0])) {
+					tab.add("items");
+				}
 			}
 		}
 		
