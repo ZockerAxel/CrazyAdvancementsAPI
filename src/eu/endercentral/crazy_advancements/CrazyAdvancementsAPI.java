@@ -804,6 +804,18 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if(cmd.getName().equalsIgnoreCase("careload")) {
+			if("all".startsWith(args[0])) {
+				tab.add("all");
+			}
+			if("advancements".startsWith(args[0])) {
+				tab.add("advancements");
+			}
+			if("items".startsWith(args[0])) {
+				tab.add("items");
+			}
+		}
+		
 		return tab;
 	}
 	
