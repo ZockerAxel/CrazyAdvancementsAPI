@@ -97,6 +97,33 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	private final List<CustomItem> customItems = new ArrayList<>();
 	private AdvancementManager fileAdvancementManager;
 	
+	/**
+	 * Reloads the API<br>
+	 * Currently reloads JSON Advancements and Custom Item Definitions
+	 */
+	public void reload() {
+		loadCustomItems();
+		reloadFileAdvancements();
+	}
+	
+	private void reloadFileAdvancements() {
+		if(fileAdvancementManager != null) {
+			for(Player player : new ArrayList<>(fileAdvancementManager.getPlayers())) {
+				fileAdvancementManager.removePlayer(player);
+			}
+			fileAdvancementManager.resetAccessible();
+		}
+		fileAdvancementManager = new AdvancementManager(new NameKey(API_NAMESPACE, "file"));
+		fileAdvancementManager.makeAccessible();
+		loadFileAdvancements();
+		
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			packetReciever.initPlayer(player);
+			fileAdvancementManager.loadProgress(player);
+			fileAdvancementManager.addPlayer(player);
+		}
+	}
+	
 	@Override
 	public void onLoad() {
 		instance = this;
@@ -609,6 +636,31 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 				sender.sendMessage(noPermission);
 			}
 			return true;
+		}
+		
+		if(cmd.getName().equalsIgnoreCase("careload")) {
+			if(args.length > 0) {
+				switch(args[1].toLowerCase()) {
+				case "all":
+					reload();
+					sender.sendMessage("§aCrazy Advancements API was reloaded");
+					break;
+				case "advancements":
+					reloadFileAdvancements();
+					sender.sendMessage("§aJSON Advancements have been reloaded");
+					break;
+				case "items":
+					loadCustomItems();
+					sender.sendMessage("§aCustom Items have been reloaded");
+					break;
+				default:
+					sender.sendMessage("§cInvalid Reload Categor '" + args[0] +"'. Valid categories are all, advancements, items");
+					break;
+				}
+			} else {
+				reload();
+				sender.sendMessage("§aCrazy Advancements API was reloaded");
+			}
 		}
 		
 		return true;

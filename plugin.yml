@@ -21,3 +21,6 @@ commands:
     usage: /showtoast <Player> <Icon> [Frame] <Message>
     description: Displays a Toast Advancement Message
     aliases: [catoast, toast]
+  careload:
+    usage: /careload [Category]
+    description: Reloads the CrazyAdvancements. Valid categories are all, advancements, items
