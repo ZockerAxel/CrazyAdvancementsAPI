@@ -644,27 +644,29 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("careload")) {
-			if(args.length > 0) {
-				switch(args[1].toLowerCase()) {
-				case "all":
+			if(sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.reload")) {
+				if(args.length > 0) {
+					switch(args[1].toLowerCase()) {
+					case "all":
+						reload();
+						sender.sendMessage("§aCrazy Advancements API was reloaded");
+						break;
+					case "advancements":
+						reloadFileAdvancements();
+						sender.sendMessage("§aJSON Advancements have been reloaded");
+						break;
+					case "items":
+						loadCustomItems();
+						sender.sendMessage("§aCustom Items have been reloaded");
+						break;
+					default:
+						sender.sendMessage("§cInvalid Reload Category '" + args[0] +"'. Valid categories are all, advancements, items");
+						break;
+					}
+				} else {
 					reload();
 					sender.sendMessage("§aCrazy Advancements API was reloaded");
-					break;
-				case "advancements":
-					reloadFileAdvancements();
-					sender.sendMessage("§aJSON Advancements have been reloaded");
-					break;
-				case "items":
-					loadCustomItems();
-					sender.sendMessage("§aCustom Items have been reloaded");
-					break;
-				default:
-					sender.sendMessage("§cInvalid Reload Category '" + args[0] +"'. Valid categories are all, advancements, items");
-					break;
 				}
-			} else {
-				reload();
-				sender.sendMessage("§aCrazy Advancements API was reloaded");
 			}
 		}
 		
