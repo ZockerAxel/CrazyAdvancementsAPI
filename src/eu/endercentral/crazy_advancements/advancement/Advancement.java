@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.NameKey;
@@ -407,12 +406,23 @@ public class Advancement {
 		return flags.contains(flag);
 	}
 	
-	@Warning(reason = "Only use if you know what you are doing!")
+	/**
+	 * Saves the current Visibility Status for a Player, later the visibility is checked against this value to decide whether it changed
+	 * 
+	 * @param player The Player to save the Visibility Status for
+	 * @param visible Whether the Visibility Status is true or false
+	 */
 	public void saveVisibilityStatus(Player player, boolean visible) {
 		if(savedVisibilityStatus == null) savedVisibilityStatus = new HashMap<>();
 		savedVisibilityStatus.put(player.getUniqueId().toString(), visible);
 	}
 	
+	/**
+	 * Gets the last saved Visibility Status
+	 * 
+	 * @param player The Player to check
+	 * @return The Visibility Status
+	 */
 	public boolean getVisibilityStatus(Player player) {
 		if(savedVisibilityStatus == null) savedVisibilityStatus = new HashMap<>();
 		if(!savedVisibilityStatus.containsKey(player.getUniqueId().toString())) savedVisibilityStatus.put(player.getUniqueId().toString(), getDisplay().isVisible(player, this));
