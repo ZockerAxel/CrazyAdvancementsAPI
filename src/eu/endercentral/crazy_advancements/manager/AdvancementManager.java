@@ -452,6 +452,7 @@ public final class AdvancementManager {
 				reward.onGrant(player);
 			}
 			updateProgress(player, advancement);
+			updateVisibility(player);
 		}
 		return result;
 	}
@@ -486,6 +487,7 @@ public final class AdvancementManager {
 		
 		if(result == GenericResult.CHANGED) {
 			updateProgress(player, advancement);
+			updateVisibility(player);
 		}
 		return result;
 	}
@@ -531,6 +533,7 @@ public final class AdvancementManager {
 			if(reward != null) {
 				reward.onGrant(player);
 			}
+			updateVisibility(player);
 		case CHANGED:
 			updateProgress(player, advancement);
 			break;
@@ -572,6 +575,7 @@ public final class AdvancementManager {
 		
 		if(result == GenericResult.CHANGED) {
 			updateProgress(player, advancement);
+			updateVisibility(player);
 		}
 		
 		return result;
@@ -620,6 +624,7 @@ public final class AdvancementManager {
 				if(reward != null) {
 					reward.onGrant(player);
 				}
+				updateVisibility(player);
 			case CHANGED:
 				updateProgress(player, advancement);
 				break;
