@@ -83,6 +83,7 @@ public abstract class AdvancementVisibility {
 	}
 	
 	/**
+	 * Do not call this method directly, use {@link AdvancementVisibility} to get accurate visibility data
 	 * 
 	 * @param player Player to check
 	 * @param advancement Advancement to check
@@ -92,9 +93,9 @@ public abstract class AdvancementVisibility {
 	
 	/**
 	 * 
-	 * @return true if advancement should always be visible if any child should be visible, defaults to true
+	 * @return true if advancement should always be visible if any child is granted, defaults to true
 	 */
-	public boolean isAlwaysVisibleWhenAdvancementAfterIsVisible() {
+	public boolean isAlwaysVisibleWhenAnyChildIsGranted() {
 		return true;
 	}
 	

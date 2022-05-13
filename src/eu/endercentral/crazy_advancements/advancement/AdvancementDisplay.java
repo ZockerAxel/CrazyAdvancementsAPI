@@ -350,7 +350,9 @@ public class AdvancementDisplay {
 	 */
 	public boolean isVisible(Player player, Advancement advancement) {
 		AdvancementVisibility visibility = getVisibility();
-		return visibility.isVisible(player, advancement) || advancement.isGranted(player) || (visibility.isAlwaysVisibleWhenAdvancementAfterIsVisible() && advancement.isAnythingGrantedAfter(player));
+		Advancement parent = advancement.getParent();
+		boolean parentVisible = parent == null ? true : parent.getDisplay().isVisible(player, parent);
+		return parentVisible && visibility.isVisible(player, advancement) || advancement.isGranted(player) || (visibility.isAlwaysVisibleWhenAnyChildIsGranted() && advancement.isAnythingGrantedAfter(player));
 	}
 	
 	/**

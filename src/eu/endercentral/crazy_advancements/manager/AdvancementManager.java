@@ -419,12 +419,16 @@ public final class AdvancementManager {
 			boolean visibleBefore = advancement.getVisibilityStatus(player);
 			boolean visible = advancement.getDisplay().isVisible(player, advancement);
 			
-			if(visibleBefore && !visible) {
-				AdvancementsPacket packet = new AdvancementsPacket(player, false, null, Arrays.asList(advancement.getName()));
-				packet.send();
-			} else if(!visibleBefore && visible) {
-				AdvancementsPacket packet = new AdvancementsPacket(player, false, Arrays.asList(advancement), null);
-				packet.send();
+			if(visibleBefore != visible) {
+				advancement.saveVisibilityStatus(player, visible);
+				
+				if(visible) {
+					AdvancementsPacket packet = new AdvancementsPacket(player, false, Arrays.asList(advancement), null);
+					packet.send();
+				} else {
+					AdvancementsPacket packet = new AdvancementsPacket(player, false, null, Arrays.asList(advancement.getName()));
+					packet.send();
+				}
 			}
 		}
 	}
