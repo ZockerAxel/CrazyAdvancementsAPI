@@ -363,6 +363,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 		
 		//Unload Progress in the File Advancement Manager
 		fileAdvancementManager.unloadProgress(e.getPlayer().getUniqueId());
+		fileAdvancementManager.unloadVisibilityStatus(e.getPlayer().getUniqueId());
 	}
 	
 	/**
