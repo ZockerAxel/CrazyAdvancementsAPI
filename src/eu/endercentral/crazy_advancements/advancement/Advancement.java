@@ -440,6 +440,16 @@ public class Advancement {
 	}
 	
 	/**
+	 * Unloads the Visibility Status for a Player<br>
+	 * Should only be run after somebody disconnects to free up RAM
+	 * 
+	 * @param player The UUID of Player to Unload Visibility
+	 */
+	public void unloadVisibilityStatus(UUID uuid) {
+		savedVisibilityStatus.remove(uuid.toString());
+	}
+	
+	/**
 	 * Gets a Toast Notification for this Advancement
 	 * 
 	 * @return The Toast Notification
