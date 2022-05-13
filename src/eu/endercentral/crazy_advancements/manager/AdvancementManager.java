@@ -876,6 +876,34 @@ public final class AdvancementManager {
 		}
 	}
 	
+	/**
+	 * Unloads the Visibility Status for Advancements in this Manager
+	 * 
+	 * @param player Player to unload
+	 * @param advancements A list of advancements that will have their Visibility Status unloaded - Leave empty if all Advancements should be unloaded
+	 */
+	public void unloadVisibilityStatus(Player player, Advancement... advancements) {
+		List<Advancement> advancementsList = advancements.length == 0 ? getAdvancements() : Arrays.asList(advancements);
+		
+		for(Advancement advancement : advancementsList) {
+			advancement.unloadVisibilityStatus(player);
+		}
+	}
+	
+	/**
+	 * Unloads the Visibility Status for Advancements in this Manager
+	 * 
+	 * @param uuid UUID of Player to unload
+	 * @param advancements A list of advancements that will have their Visibility Status unloaded - Leave empty if all Advancements should be unloaded
+	 */
+	public void unloadVisibilityStatus(UUID uuid, Advancement... advancements) {
+		List<Advancement> advancementsList = advancements.length == 0 ? getAdvancements() : Arrays.asList(advancements);
+		
+		for(Advancement advancement : advancementsList) {
+			advancement.unloadVisibilityStatus(uuid);
+		}
+	}
+	
 	
 	
 	
