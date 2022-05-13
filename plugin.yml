@@ -1,6 +1,6 @@
 main: eu.endercentral.crazy_advancements.CrazyAdvancementsAPI
 name: CrazyAdvancementsAPI
-version: 2.1.6
+version: 2.1.7
 api-version: 1.13
 load: startup
 author: ZockerAxel
@@ -23,4 +23,4 @@ commands:
     aliases: [catoast, toast]
   careload:
     usage: /careload [Category]
-    description: Reloads the CrazyAdvancements. Valid categories are all, advancements, items
+    description: Reloads the Crazy Advancements API. Valid categories are all, advancements, items
