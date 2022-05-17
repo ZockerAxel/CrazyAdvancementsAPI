@@ -486,7 +486,7 @@ public class Advancement {
 		title.addExtra(display.getTitle().getJson());
 		title.addExtra("]");
 		title.setColor(challenge ? ChatColor.DARK_PURPLE : ChatColor.GREEN);
-		BaseComponent titleTextComponent = display.getTitle().getJson();
+		TextComponent titleTextComponent = new TextComponent(display.getTitle().getJson());
 		titleTextComponent.setColor(title.getColor());
 		Text titleText = new Text(new BaseComponent[] {titleTextComponent});
 		Text descriptionText = new Text(new BaseComponent[] {display.getDescription().getJson()});
