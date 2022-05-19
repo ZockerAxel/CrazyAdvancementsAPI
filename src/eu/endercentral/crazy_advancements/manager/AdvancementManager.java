@@ -455,8 +455,8 @@ public final class AdvancementManager {
 			if(reward != null) {
 				reward.onGrant(player);
 			}
-			updateProgress(player, advancement);
 			updateVisibility(player);
+			updateProgress(player, advancement);
 		}
 		return result;
 	}
@@ -490,8 +490,8 @@ public final class AdvancementManager {
 		GenericResult result = progress.revoke();
 		
 		if(result == GenericResult.CHANGED) {
-			updateProgress(player, advancement);
 			updateVisibility(player);
+			updateProgress(player, advancement);
 		}
 		return result;
 	}
@@ -578,8 +578,8 @@ public final class AdvancementManager {
 		GenericResult result = progress.revokeCriteria(criteria);
 		
 		if(result == GenericResult.CHANGED) {
-			updateProgress(player, advancement);
 			updateVisibility(player);
+			updateProgress(player, advancement);
 		}
 		
 		return result;
