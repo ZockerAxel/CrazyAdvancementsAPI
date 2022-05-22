@@ -436,6 +436,7 @@ public class Advancement {
 	 * @param player The Player to Unload Visibility
 	 */
 	public void unloadVisibilityStatus(Player player) {
+		if(savedVisibilityStatus == null) return;
 		savedVisibilityStatus.remove(player.getUniqueId().toString());
 	}
 	
