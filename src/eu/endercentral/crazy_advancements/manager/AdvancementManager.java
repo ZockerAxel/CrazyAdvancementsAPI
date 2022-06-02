@@ -27,13 +27,14 @@ import eu.endercentral.crazy_advancements.CrazyAdvancementsAPI;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
-import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import eu.endercentral.crazy_advancements.advancement.AdvancementReward;
 import eu.endercentral.crazy_advancements.advancement.criteria.CriteriaType;
 import eu.endercentral.crazy_advancements.advancement.progress.AdvancementProgress;
 import eu.endercentral.crazy_advancements.advancement.progress.GenericResult;
 import eu.endercentral.crazy_advancements.advancement.progress.GrantCriteriaResult;
 import eu.endercentral.crazy_advancements.advancement.progress.SetCriteriaResult;
+import eu.endercentral.crazy_advancements.event.AdvancementGrantEvent;
+import eu.endercentral.crazy_advancements.event.AdvancementRevokeEvent;
 import eu.endercentral.crazy_advancements.packet.AdvancementsPacket;
 import eu.endercentral.crazy_advancements.packet.PacketConverter;
 import eu.endercentral.crazy_advancements.save.CriteriaData;
@@ -445,10 +446,13 @@ public final class AdvancementManager {
 		GenericResult result = progress.grant();
 		
 		if(result == GenericResult.CHANGED) {
-			if(advancement.hasFlag(AdvancementFlag.SHOW_TOAST)) {
+			AdvancementGrantEvent event = new AdvancementGrantEvent(this, advancement, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if(event.isShowToast()) {
 				advancement.displayToast(player);
 			}
-			if(advancement.hasFlag(AdvancementFlag.DISPLAY_MESSAGE)) {
+			if(event.isDisplayMessage()) {
 				advancement.displayMessageToEverybody(player);
 			}
 			AdvancementReward reward = advancement.getReward();
@@ -490,6 +494,9 @@ public final class AdvancementManager {
 		GenericResult result = progress.revoke();
 		
 		if(result == GenericResult.CHANGED) {
+			AdvancementRevokeEvent event = new AdvancementRevokeEvent(this, advancement, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
 			updateVisibility(player);
 			updateProgress(player, advancement);
 		}
@@ -527,10 +534,13 @@ public final class AdvancementManager {
 		
 		switch(result) {
 		case COMPLETED:
-			if(advancement.hasFlag(AdvancementFlag.SHOW_TOAST)) {
+			AdvancementGrantEvent event = new AdvancementGrantEvent(this, advancement, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
+			if(event.isShowToast()) {
 				advancement.displayToast(player);
 			}
-			if(advancement.hasFlag(AdvancementFlag.DISPLAY_MESSAGE)) {
+			if(event.isDisplayMessage()) {
 				advancement.displayMessageToEverybody(player);
 			}
 			AdvancementReward reward = advancement.getReward();
@@ -578,6 +588,9 @@ public final class AdvancementManager {
 		GenericResult result = progress.revokeCriteria(criteria);
 		
 		if(result == GenericResult.CHANGED) {
+			AdvancementRevokeEvent event = new AdvancementRevokeEvent(this, advancement, player);
+			Bukkit.getPluginManager().callEvent(event);
+			
 			updateVisibility(player);
 			updateProgress(player, advancement);
 		}
@@ -614,14 +627,18 @@ public final class AdvancementManager {
 	public SetCriteriaResult setCriteriaProgress(Player player, Advancement advancement, int criteriaProgress) {
 		if(advancement.getCriteria().getType() == CriteriaType.NUMBER) {
 			AdvancementProgress progress = advancement.getProgress(player);
+			boolean doneBefore = progress.isDone();
 			SetCriteriaResult result = progress.setCriteriaProgress(criteriaProgress);
 			
 			switch(result) {
 			case COMPLETED:
-				if(advancement.hasFlag(AdvancementFlag.SHOW_TOAST)) {
+				AdvancementGrantEvent event = new AdvancementGrantEvent(this, advancement, player);
+				Bukkit.getPluginManager().callEvent(event);
+				
+				if(event.isShowToast()) {
 					advancement.displayToast(player);
 				}
-				if(advancement.hasFlag(AdvancementFlag.DISPLAY_MESSAGE)) {
+				if(event.isDisplayMessage()) {
 					advancement.displayMessageToEverybody(player);
 				}
 				AdvancementReward reward = advancement.getReward();
@@ -630,6 +647,10 @@ public final class AdvancementManager {
 				}
 				updateVisibility(player);
 			case CHANGED:
+				if(doneBefore) {
+					AdvancementRevokeEvent revokeEvent = new AdvancementRevokeEvent(this, advancement, player);
+					Bukkit.getPluginManager().callEvent(revokeEvent);
+				}
 				updateProgress(player, advancement);
 				break;
 			default:
