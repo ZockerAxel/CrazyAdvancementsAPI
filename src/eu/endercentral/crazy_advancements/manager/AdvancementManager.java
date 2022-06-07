@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -103,7 +102,9 @@ public final class AdvancementManager {
 	 * @param player Player to add
 	 */
 	public void addPlayer(Player player) {
-		Validate.notNull(player);
+		if(player == null) {
+			throw new RuntimeException("Player may not be null");
+		}
 		if(!players.contains(player)) {
 			players.add(player);
 		}
