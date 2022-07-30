@@ -971,7 +971,7 @@ public final class AdvancementManager {
 						e1.printStackTrace();
 					}
 				}
-				System.err.println("Unable to read Save File!");
+				CrazyAdvancementsAPI.getInstance().getLogger().severe("Unable to read Save File!");
 				ex.printStackTrace();
 			}
 		}

@@ -148,7 +148,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 			}
 		}
 		
-		System.out.println("Loaded " + customItems.size() + " Custom Items");
+		getLogger().info("Loaded " + customItems.size() + " Custom Items");
 	}
 	
 	private List<CustomItem> loadCustomItemsFromNamespace(String namespace, String path, File location) {
@@ -180,7 +180,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 							e1.printStackTrace();
 						}
 					}
-					System.err.println("Unable to load Custom Item from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
+					getLogger().warning("Unable to load Custom Item from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
 				}
 			}
 		}
@@ -257,7 +257,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 			//Abort adding Advancements if no advancements were able to be processed
 			if(processedAdvancements == 0) {
 				for(NameKey name : missingAdvancements) {
-					System.err.println("Unable to load Advancement " + name + ": Parent does not exist");
+					getLogger().warning("Unable to load Advancement " + name + ": Parent does not exist");
 				}
 				break;
 			}
@@ -293,7 +293,7 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 							e1.printStackTrace();
 						}
 					}
-					System.err.println("Unable to load Advancement from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
+					getLogger().warning("Unable to load Advancement from File " + namespace + "/" + file.getName() + ": " + e.getLocalizedMessage());
 				}
 			}
 		}
