@@ -482,16 +482,23 @@ public class Advancement {
 		
 		TranslatableComponent message = new TranslatableComponent();
 		message.setTranslate(translation);
-		TextComponent playerNameText = new TextComponent(player.getDisplayName());
+		
+		TextComponent playerNameText = new TextComponent();
+		BaseComponent[] playerNameComponents = TextComponent.fromLegacyText(player.getDisplayName());
+		playerNameText.setExtra(Arrays.asList(playerNameComponents));
+		
 		TextComponent title = new TextComponent("[");
 		title.addExtra(display.getTitle().getJson());
 		title.addExtra("]");
 		title.setColor(challenge ? ChatColor.DARK_PURPLE : ChatColor.GREEN);
+		
 		TextComponent titleTextComponent = new TextComponent(display.getTitle().getJson());
 		titleTextComponent.setColor(title.getColor());
+		
 		Text titleText = new Text(new BaseComponent[] {titleTextComponent});
 		Text descriptionText = new Text(new BaseComponent[] {display.getDescription().getJson()});
 		title.setHoverEvent(new HoverEvent(Action.SHOW_TEXT, titleText, new Text("\n"), descriptionText));
+		
 		message.setWith(Arrays.asList(playerNameText, title));
 		
 		return message;
