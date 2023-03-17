@@ -2,7 +2,7 @@ package eu.endercentral.crazy_advancements.packet;
 
 import java.util.HashMap;
 
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 
 import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;

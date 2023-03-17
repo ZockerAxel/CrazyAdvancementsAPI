@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.event.AdvancementScreenCloseEvent;
@@ -19,17 +19,27 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayInAdvancements;
 import net.minecraft.network.protocol.game.PacketPlayInAdvancements.Status;
+import net.minecraft.server.network.PlayerConnection;
 
 public class AdvancementPacketReceiver {
 	
 	private static HashMap<String, ChannelHandler> handlers = new HashMap<>();
 	private static Field channelField;
+	private static Field networkManagerField;
 	
 	{
 		for(Field f : NetworkManager.class.getDeclaredFields()) {
 			if(f.getType().isAssignableFrom(Channel.class)) {
 				channelField = f;
 				channelField.setAccessible(true);
+				break;
+			}
+		}
+		
+		for(Field f : PlayerConnection.class.getDeclaredFields()) {
+			if(f.getType().isAssignableFrom(NetworkManager.class)) {
+				networkManagerField = f;
+				networkManagerField.setAccessible(true);
 				break;
 			}
 		}
@@ -64,7 +74,7 @@ public class AdvancementPacketReceiver {
 	}
 	
 	public Channel getNettyChannel(Player p) {
-	    NetworkManager manager = ((CraftPlayer)p).getHandle().b.b;
+	    NetworkManager manager = getNetworkManager(p);
 	    Channel channel = null;
 	    try {
 	        channel = (Channel) channelField.get(manager);
@@ -72,6 +82,17 @@ public class AdvancementPacketReceiver {
 	        e.printStackTrace();
 	    }
 	    return channel;
+	}
+	
+	public NetworkManager getNetworkManager(Player p) {
+		PlayerConnection connection = ((CraftPlayer) p).getHandle().b;
+		NetworkManager manager = null;
+		try {
+	        manager = (NetworkManager) networkManagerField.get(connection);
+	    } catch (IllegalArgumentException | IllegalAccessException e) {
+	        e.printStackTrace();
+	    }
+	    return manager;
 	}
 	
 	public boolean close(Player p, ChannelHandler handler) {
