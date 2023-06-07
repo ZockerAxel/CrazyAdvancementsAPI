@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.advancement.ToastNotification;
@@ -97,7 +97,7 @@ public class ToastPacket {
 	 */
 	public void send() {
 		PacketPlayOutAdvancements packet = build();
-		((CraftPlayer) getPlayer()).getHandle().b.a(packet);
+		((CraftPlayer) getPlayer()).getHandle().c.a(packet);
 	}
 	
 	

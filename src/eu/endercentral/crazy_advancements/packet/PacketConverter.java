@@ -2,7 +2,7 @@ package eu.endercentral.crazy_advancements.packet;
 
 import java.util.HashMap;
 
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 
 import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;
@@ -71,7 +71,7 @@ public class PacketConverter {
 		advDisplay.a(x, y);
 		
 		net.minecraft.advancements.Advancement parent = advancement.getParent() == null ? null : createDummy(advancement.getParent().getName());
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), parent, advDisplay, advancementRewards, advancement.getCriteria().getCriteria(), advancement.getCriteria().getRequirements());
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), parent, advDisplay, advancementRewards, advancement.getCriteria().getCriteria(), advancement.getCriteria().getRequirements(), false);
 		
 		return adv;
 	}
@@ -89,7 +89,7 @@ public class PacketConverter {
 		
 		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(icon, notification.getMessage().getBaseComponent(), new JSONMessage(new TextComponent("Toast Notification")).getBaseComponent(), backgroundTexture, notification.getFrame().getNMS(), true, false, true);
 		
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), null, advDisplay, advancementRewards, ToastNotification.NOTIFICATION_CRITERIA.getCriteria(), ToastNotification.NOTIFICATION_CRITERIA.getRequirements());
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), null, advDisplay, advancementRewards, ToastNotification.NOTIFICATION_CRITERIA.getCriteria(), ToastNotification.NOTIFICATION_CRITERIA.getRequirements(), false);
 		
 		return adv;
 	}
@@ -102,7 +102,7 @@ public class PacketConverter {
 	 */
 	public static net.minecraft.advancements.Advancement createDummy(NameKey name) {
 //		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(null, null, null, null, AdvancementFrameType.a, false, false, false);
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(name.getMinecraftKey(), null, null, null, new HashMap<>(), new String[0][0]);
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(name.getMinecraftKey(), null, null, null, new HashMap<>(), new String[0][0], false);
 		return adv;
 	}
 	
