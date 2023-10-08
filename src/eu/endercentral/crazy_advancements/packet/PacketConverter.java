@@ -1,8 +1,9 @@
 package eu.endercentral.crazy_advancements.packet;
 
 import java.util.HashMap;
+import java.util.Optional;
 
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 
 import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;
@@ -11,6 +12,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import eu.endercentral.crazy_advancements.advancement.ToastNotification;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.ItemStack;
@@ -70,8 +72,8 @@ public class PacketConverter {
 		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), false, false, advancement.hasFlag(AdvancementFlag.SEND_WITH_HIDDEN_BOOLEAN));
 		advDisplay.a(x, y);
 		
-		net.minecraft.advancements.Advancement parent = advancement.getParent() == null ? null : createDummy(advancement.getParent().getName());
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), parent, advDisplay, advancementRewards, advancement.getCriteria().getCriteria(), advancement.getCriteria().getRequirements(), false);
+		Optional<MinecraftKey> parent = advancement.getParent() == null ? Optional.empty() : Optional.of(advancement.getParent().getName().getMinecraftKey());
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(parent, Optional.of(advDisplay), advancementRewards, advancement.getCriteria().getCriteria(), advancement.getCriteria().getAdvancementRequirements(), false);
 		
 		return adv;
 	}
@@ -89,7 +91,7 @@ public class PacketConverter {
 		
 		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(icon, notification.getMessage().getBaseComponent(), new JSONMessage(new TextComponent("Toast Notification")).getBaseComponent(), backgroundTexture, notification.getFrame().getNMS(), true, false, true);
 		
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), null, advDisplay, advancementRewards, ToastNotification.NOTIFICATION_CRITERIA.getCriteria(), ToastNotification.NOTIFICATION_CRITERIA.getRequirements(), false);
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(Optional.empty(), Optional.of(advDisplay), advancementRewards, ToastNotification.NOTIFICATION_CRITERIA.getCriteria(), ToastNotification.NOTIFICATION_CRITERIA.getAdvancementRequirements(), false);
 		
 		return adv;
 	}
@@ -99,10 +101,11 @@ public class PacketConverter {
 	 * 
 	 * @param name The name of the Advancement
 	 * @return the Dummy Advancement
+	 * @deprecated No longer required for parent dummies. Might be removed in a future version.
 	 */
+	@Deprecated(forRemoval = true, since = "2.1.15")
 	public static net.minecraft.advancements.Advancement createDummy(NameKey name) {
-//		net.minecraft.advancements.AdvancementDisplay advDisplay = new net.minecraft.advancements.AdvancementDisplay(null, null, null, null, AdvancementFrameType.a, false, false, false);
-		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(name.getMinecraftKey(), null, null, null, new HashMap<>(), new String[0][0], false);
+		net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(Optional.empty(), Optional.empty(), null, new HashMap<>(), new AdvancementRequirements(new String[0][0]), false);
 		return adv;
 	}
 	

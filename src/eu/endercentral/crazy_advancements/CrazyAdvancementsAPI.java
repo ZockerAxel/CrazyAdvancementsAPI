@@ -17,7 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import eu.endercentral.crazy_advancements.advancement.Advancement;
@@ -54,10 +53,8 @@ import eu.endercentral.crazy_advancements.item.SerializedCustomItem;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import eu.endercentral.crazy_advancements.packet.AdvancementsPacket;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.CriterionInstance;
-import net.minecraft.advancements.critereon.LootSerializationContext;
+import net.minecraft.advancements.critereon.CriterionTriggerImpossible;
 import net.minecraft.network.protocol.game.PacketPlayOutSelectAdvancementTab;
-import net.minecraft.resources.MinecraftKey;
 
 /**
  * Represents the API's Plugin
@@ -80,17 +77,9 @@ public class CrazyAdvancementsAPI extends JavaPlugin implements Listener {
 	/**
 	 * Criterion Instance for Internal Use
 	 */
-	public static final Criterion CRITERION = new Criterion(new CriterionInstance() {
-		@Override
-		public JsonObject a(LootSerializationContext arg0) {
-			return null;
-		}
-		
-		@Override
-		public MinecraftKey a() {
-			return new MinecraftKey("", "");
-		}
-	});
+	public static final Criterion<?> CRITERION = new Criterion<>(new CriterionTriggerImpossible(), new CriterionTriggerImpossible.a());
+	
+	
 	
 	private static AdvancementPacketReceiver packetReciever;
 	private static HashMap<String, NameKey> activeTabs = new HashMap<>();

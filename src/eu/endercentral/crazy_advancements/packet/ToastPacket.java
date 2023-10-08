@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.advancement.ToastNotification;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
 import net.minecraft.resources.MinecraftKey;
@@ -74,13 +75,13 @@ public class ToastPacket {
 	 */
 	public PacketPlayOutAdvancements build() {
 		//Create Lists
-		List<net.minecraft.advancements.Advancement> advancements = new ArrayList<>();
+		List<AdvancementHolder> advancements = new ArrayList<>();
 		Set<MinecraftKey> removedAdvancements = new HashSet<>();
 		Map<MinecraftKey, AdvancementProgress> progress = new HashMap<>();
 		
 		//Populate Lists
 		if(add) {
-			advancements.add(PacketConverter.toNmsToastAdvancement(getNotification()));
+			advancements.add(new AdvancementHolder(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), PacketConverter.toNmsToastAdvancement(getNotification())));
 			progress.put(ToastNotification.NOTIFICATION_NAME.getMinecraftKey(), ToastNotification.NOTIFICATION_PROGRESS.getNmsProgress());
 		} else {
 			removedAdvancements.add(ToastNotification.NOTIFICATION_NAME.getMinecraftKey());

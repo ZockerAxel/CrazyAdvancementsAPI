@@ -342,7 +342,7 @@ public class Advancement {
 	 */
 	public AdvancementProgress getProgress(UUID uuid) {
 		if(!progressMap.containsKey(uuid.toString())) {
-			progressMap.put(uuid.toString(), new AdvancementProgress(getCriteria().getCriteria(), getCriteria().getRequirements()));
+			progressMap.put(uuid.toString(), new AdvancementProgress(getCriteria().getRequirements()));
 		}
 		return progressMap.get(uuid.toString());
 	}

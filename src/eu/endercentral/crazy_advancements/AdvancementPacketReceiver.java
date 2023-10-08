@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.event.AdvancementScreenCloseEvent;
@@ -115,8 +115,8 @@ public class AdvancementPacketReceiver {
 			@Override
 			public boolean handle(Player p, PacketPlayInAdvancements packet) {
 				
-				if(packet.c() == Status.a) {
-					NameKey name = new NameKey(packet.d());
+				if(packet.d() == Status.a) {
+					NameKey name = new NameKey(packet.e());
 					AdvancementTabChangeEvent event = new AdvancementTabChangeEvent(p, name);
 					Bukkit.getPluginManager().callEvent(event);
 					

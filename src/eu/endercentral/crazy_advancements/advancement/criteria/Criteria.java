@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import eu.endercentral.crazy_advancements.CrazyAdvancementsAPI;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Criterion;
 
 /**
@@ -22,7 +23,7 @@ public class Criteria {
 	private final String[] actionNames;
 	private final String[][] requirements;
 	
-	private final HashMap<String, Criterion> criteria = new HashMap<>();
+	private final HashMap<String, Criterion<?>> criteria = new HashMap<>();
 	
 	/**
 	 * Constructor for creating {@link CriteriaType} NUMBER which will require a certain number
@@ -94,10 +95,19 @@ public class Criteria {
 	/**
 	 * Gets the Requirements (auto-generated when using {@link CriteriaType} NUMBER)
 	 * 
-	 * @return The Requirementsn 
+	 * @return The Requirements
 	 */
 	public String[][] getRequirements() {
 		return requirements;
+	}
+	
+	/**
+	 * Gets the Requirements (auto-generated when using {@link CriteriaType} NUMBER)
+	 * 
+	 * @return The Requirements
+	 */
+	public AdvancementRequirements getAdvancementRequirements() {
+		return new AdvancementRequirements(requirements);
 	}
 	
 	/**
@@ -105,8 +115,8 @@ public class Criteria {
 	 * 
 	 * @return The generated Criteria
 	 */
-	public HashMap<String, Criterion> getCriteria() {
-		return new HashMap<String, Criterion>(criteria);
+	public HashMap<String, Criterion<?>> getCriteria() {
+		return new HashMap<String, Criterion<?>>(criteria);
 	}
 	
 	

@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
 import net.minecraft.resources.MinecraftKey;
@@ -87,14 +88,14 @@ public class AdvancementsPacket {
 	 */
 	public PacketPlayOutAdvancements build() {
 		//Create Lists
-		List<net.minecraft.advancements.Advancement> advancements = new ArrayList<>();
+		List<net.minecraft.advancements.AdvancementHolder> advancements = new ArrayList<>();
 		Set<MinecraftKey> removedAdvancements = new HashSet<>();
 		Map<MinecraftKey, AdvancementProgress> progress = new HashMap<>();
 		
 		//Populate Lists
 		for(Advancement advancement : this.advancements) {
 			net.minecraft.advancements.Advancement nmsAdvancement = convertAdvancement(advancement);
-			advancements.add(nmsAdvancement);
+			advancements.add(new AdvancementHolder(advancement.getName().getMinecraftKey(), nmsAdvancement));
 			progress.put(advancement.getName().getMinecraftKey(), advancement.getProgress(getPlayer()).getNmsProgress());
 		}
 		for(NameKey removed : this.removedAdvancements) {

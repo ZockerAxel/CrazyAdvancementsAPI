@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 import com.google.common.collect.Iterables;
 
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.CriterionProgress;
 
@@ -25,9 +26,21 @@ public class AdvancementProgress {
 	 * 
 	 * @param criteria The Criteria
 	 * @param requirements The Requirements
+	 * @deprecated Use AdvancementProgress(String[][] requirements) instead
 	 */
-	public AdvancementProgress(Map<String, Criterion> criteria, String[][] requirements) {
-		nmsProgress.a(criteria, requirements);
+	@Deprecated(forRemoval = true, since = "2.1.15")
+	public AdvancementProgress(Map<String, Criterion<?>> criteria, String[][] requirements) {
+		nmsProgress.a(new AdvancementRequirements(requirements));
+	}
+	
+	/**
+	 * Constructor for Creating a Progress Instance
+	 * 
+	 * @param criteria The Criteria
+	 * @param requirements The Requirements
+	 */
+	public AdvancementProgress(String[][] requirements) {
+		nmsProgress.a(new AdvancementRequirements(requirements));
 	}
 	
 	/**

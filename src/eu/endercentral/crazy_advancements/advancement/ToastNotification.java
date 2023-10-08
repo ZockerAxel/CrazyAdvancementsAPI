@@ -23,7 +23,7 @@ public class ToastNotification {
 	
 	public static final NameKey NOTIFICATION_NAME = new NameKey(CrazyAdvancementsAPI.API_NAMESPACE, "notification");
 	public static final Criteria NOTIFICATION_CRITERIA = new Criteria(1);
-	public static final AdvancementProgress NOTIFICATION_PROGRESS = new AdvancementProgress(NOTIFICATION_CRITERIA.getCriteria(), NOTIFICATION_CRITERIA.getRequirements());
+	public static final AdvancementProgress NOTIFICATION_PROGRESS = new AdvancementProgress(NOTIFICATION_CRITERIA.getRequirements());
 	
 	static {
 		NOTIFICATION_PROGRESS.setCriteriaProgress(1);
