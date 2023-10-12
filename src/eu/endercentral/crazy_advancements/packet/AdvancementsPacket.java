@@ -117,7 +117,7 @@ public class AdvancementsPacket {
 	 */
 	public void send() {
 		PacketPlayOutAdvancements packet = build();
-		((CraftPlayer) getPlayer()).getHandle().c.a(packet);
+		((CraftPlayer) getPlayer()).getHandle().c.a(packet, null);
 	}
 	
 	

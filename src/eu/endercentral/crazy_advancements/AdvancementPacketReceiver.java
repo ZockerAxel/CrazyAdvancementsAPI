@@ -20,6 +20,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayInAdvancements;
 import net.minecraft.network.protocol.game.PacketPlayInAdvancements.Status;
 import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 
 public class AdvancementPacketReceiver {
 	
@@ -36,7 +37,7 @@ public class AdvancementPacketReceiver {
 			}
 		}
 		
-		for(Field f : PlayerConnection.class.getDeclaredFields()) {
+		for(Field f : ServerCommonPacketListenerImpl.class.getDeclaredFields()) {
 			if(f.getType().isAssignableFrom(NetworkManager.class)) {
 				networkManagerField = f;
 				networkManagerField.setAccessible(true);
