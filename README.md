@@ -26,6 +26,17 @@ Then, add the following to your dependencies:
     <version>VERSION</version>
 </dependency>
 ```
+Or for mojang-mapped jar:
+```
+<dependency>
+    <groupId>com.github.ZockerAxel</groupId>
+    <artifactId>CrazyAdvancementsAPI</artifactId>
+    <version>VERSION</version>
+    <classifier>mojmap</classifier>
+</dependency>
+```
+
+
 Replace VERSION with the Version you want, for example for v2.1.17a, you would use:
 ```xml
 <dependency>
@@ -50,7 +61,7 @@ dependencies {
     compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:VERSION")
 }
 ```
-Or for mojang-mapped jar:
+Or for mojang-mapped jar
 ```kts
 dependencies {
     compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:VERSION:mojmap")
