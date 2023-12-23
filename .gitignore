@@ -1,4 +1,9 @@
 # User-specific stuff
+.classpath
+.project
+.settings/
+doc/
+bin/
 .idea/
 
 *.iml
