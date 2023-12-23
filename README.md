@@ -43,20 +43,20 @@ repositories {
 Then, add the following to your dependencies:
 ```kts
 dependencies {
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:{VERSION}")
+    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:VERSION")
 }
 ```
 Or for mojang-mapped jar:
 ```kts
 dependencies {
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:{VERSION}:mojmap")
+    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:VERSION:mojmap")
 }
 ```
 
 And replace VERSION with the Version you want, for exmaple for v2.1.17, you would use:
 ```kts
 dependencies {
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:{v2.1.17}")
+    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:v2.1.17")
 }
 ```
 
