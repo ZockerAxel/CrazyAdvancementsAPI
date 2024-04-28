@@ -1,5 +1,11 @@
 package eu.endercentral.crazy_advancements.packet;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
+
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+
 import eu.endercentral.crazy_advancements.JSONMessage;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
@@ -11,11 +17,6 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
 
 public class PacketConverter {
 	

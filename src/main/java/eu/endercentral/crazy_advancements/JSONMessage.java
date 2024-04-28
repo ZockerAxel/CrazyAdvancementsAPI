@@ -1,8 +1,15 @@
 package eu.endercentral.crazy_advancements;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.HolderLookup.RegistryLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * Represents a Message in JSON Format
@@ -11,6 +18,9 @@ import net.minecraft.network.chat.Component;
  *
  */
 public class JSONMessage {
+	
+	private static final Provider COMPONENT_SERIALIZER_PROVIDER = new TextHolderLookupProvider();
+	
 	
 	private final BaseComponent json;
 	
@@ -38,12 +48,28 @@ public class JSONMessage {
 	 * @return An {@link Component} representation of an ingame Message
 	 */
 	public Component getBaseComponent() {
-		return Component.Serializer.fromJson(ComponentSerializer.toString(json));
+		return Component.Serializer.fromJson(ComponentSerializer.toString(json), COMPONENT_SERIALIZER_PROVIDER);
 	}
 	
 	@Override
 	public String toString() {
 		return json.toPlainText();
+	}
+	
+	
+	
+	private static class TextHolderLookupProvider implements Provider {
+		
+		@Override
+		public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
+			return Stream.of();
+		}
+		
+		@Override
+		public <T> Optional<RegistryLookup<T>> lookup(ResourceKey<? extends Registry<? extends T>> registryRef) {
+			return Optional.empty();
+		}
+		
 	}
 	
 }

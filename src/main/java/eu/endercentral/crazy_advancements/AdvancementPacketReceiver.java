@@ -1,5 +1,13 @@
 package eu.endercentral.crazy_advancements;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+
 import eu.endercentral.crazy_advancements.event.AdvancementScreenCloseEvent;
 import eu.endercentral.crazy_advancements.event.AdvancementTabChangeEvent;
 import io.netty.channel.Channel;
@@ -12,13 +20,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundSeenAdvancementsPacket;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
 
 public class AdvancementPacketReceiver {
 	

@@ -1,8 +1,47 @@
 package eu.endercentral.crazy_advancements;
 
-import com.google.gson.*;
-import eu.endercentral.crazy_advancements.advancement.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nullable;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+import eu.endercentral.crazy_advancements.advancement.Advancement;
+import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay.AdvancementFrame;
+import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
+import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
+import eu.endercentral.crazy_advancements.advancement.ToastNotification;
 import eu.endercentral.crazy_advancements.advancement.criteria.CriteriaType;
 import eu.endercentral.crazy_advancements.advancement.progress.GenericResult;
 import eu.endercentral.crazy_advancements.advancement.progress.GrantCriteriaResult;
@@ -16,29 +55,6 @@ import eu.endercentral.crazy_advancements.packet.AdvancementsPacket;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.network.protocol.game.ClientboundSelectAdvancementsTabPacket;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Represents the API's Plugin
