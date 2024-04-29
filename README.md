@@ -27,7 +27,7 @@ Then, add the following to your dependencies:
 </dependency>
 ```
 Or for mojang-mapped jar:
-```
+```xml
 <dependency>
     <groupId>com.github.ZockerAxel</groupId>
     <artifactId>CrazyAdvancementsAPI</artifactId>
