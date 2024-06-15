@@ -1,8 +1,8 @@
 package eu.endercentral.crazy_advancements;
 
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.Objects;
+
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Represents a Unique Name
@@ -88,7 +88,7 @@ public class NameKey {
 	 * @return A {@link ResourceLocation} representation of this NameKey
 	 */
 	public ResourceLocation getMinecraftKey() {
-		if(mcKey == null) mcKey = new ResourceLocation(namespace, key);
+		if(mcKey == null) mcKey = ResourceLocation.fromNamespaceAndPath(namespace, key);
 		return mcKey;
 	}
 	

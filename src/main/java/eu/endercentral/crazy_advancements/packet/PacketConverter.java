@@ -61,7 +61,7 @@ public class PacketConverter {
 		ItemStack icon = CraftItemStack.asNMSCopy(display.getIcon());
 		
 		boolean hasBackgroundTexture = display.getBackgroundTexture() != null;
-		Optional<ResourceLocation> backgroundTexture = hasBackgroundTexture ? Optional.of(new ResourceLocation(display.getBackgroundTexture())) : Optional.empty();
+		Optional<ResourceLocation> backgroundTexture = hasBackgroundTexture ? Optional.of(ResourceLocation.parse(display.getBackgroundTexture())) : Optional.empty();
 		
 		float x = generateX(advancement.getTab(), display.generateX());
 		float y = generateY(advancement.getTab(), display.generateY());
