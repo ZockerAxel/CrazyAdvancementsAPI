@@ -7,7 +7,7 @@ CrazyAdvancementsAPI is an API for creating and managing Advancements programmat
 
 
 ## Maven
-Maven only works in API Version 2.1.17a and higher.
+Maven with Jitpack only works in API Version 2.1.17a and higher.
 
 First, add the Jitpack Repository to your repositories
 ```xml
@@ -27,7 +27,7 @@ Then, add the following to your dependencies:
 </dependency>
 ```
 Or for mojang-mapped jar:
-```
+```xml
 <dependency>
     <groupId>com.github.ZockerAxel</groupId>
     <artifactId>CrazyAdvancementsAPI</artifactId>
@@ -37,17 +37,17 @@ Or for mojang-mapped jar:
 ```
 
 
-Replace VERSION with the Version you want, for example for v2.1.17a, you would use:
+Replace VERSION with the Version you want, for example for v2.1.18a, you would use:
 ```xml
 <dependency>
     <groupId>com.github.ZockerAxel</groupId>
     <artifactId>CrazyAdvancementsAPI</artifactId>
-    <version>v2.1.17a</version>
+    <version>v2.1.18a</version>
 </dependency>
 ```
 
 ## Gradle
-Gradle only works in API Version 2.1.17a and higher.
+Gradle with Jitpack only works in API Version 2.1.17a and higher.
 
 First, add the Jitpack Repository to your repositories
 ```kts
@@ -68,10 +68,10 @@ dependencies {
 }
 ```
 
-And replace VERSION with the Version you want, for exmaple for v2.1.17a, you would use:
+And replace VERSION with the Version you want, for exmaple for v2.1.18a, you would use:
 ```kts
 dependencies {
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:v2.1.17a")
+    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:v2.1.18a")
 }
 ```
 
