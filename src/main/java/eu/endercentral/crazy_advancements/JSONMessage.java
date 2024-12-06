@@ -61,8 +61,8 @@ public class JSONMessage {
 	private static class TextHolderLookupProvider implements Provider {
 		
 		@Override
-		public Stream<ResourceKey<? extends Registry<?>>> listRegistries() {
-			return Stream.of();
+		public Stream<ResourceKey<? extends Registry<?>>> listRegistryKeys() {
+			return Stream.empty();
 		}
 		
 		@Override
