@@ -37,12 +37,12 @@ Or for mojang-mapped jar:
 ```
 
 
-Replace VERSION with the Version you want, for example for v2.1.20, you would use:
+Replace VERSION with the Version you want, for example for v2.1.21, you would use:
 ```xml
 <dependency>
     <groupId>com.github.ZockerAxel</groupId>
     <artifactId>CrazyAdvancementsAPI</artifactId>
-    <version>v2.1.20</version>
+    <version>v2.1.21</version>
 </dependency>
 ```
 
@@ -68,10 +68,10 @@ dependencies {
 }
 ```
 
-And replace VERSION with the Version you want, for exmaple for v2.1.20, you would use:
+And replace VERSION with the Version you want, for exmaple for v2.1.21, you would use:
 ```kts
 dependencies {
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:v2.1.20")
+    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:v2.1.21")
 }
 ```
 
